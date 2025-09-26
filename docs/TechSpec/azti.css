@@ -1,0 +1,22 @@
+.quarto-title-block .quarto-title-banner {
+  background-image: url("figures/azti.png");
+  background-size: 175px;
+  background-position: left;
+  background-repeat: no-repeat;
+  padding-left: 30px;
+  background-origin: content-box;
+}
+
+#TOC {
+  background: url("figures/AZTI_horizontal.png");
+  background-size: 90%;
+  padding-bottom: 40px !important;
+  background-position: bottom;
+  background-repeat: no-repeat;
+}
+
+.center-table table {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -1,0 +1,201 @@
+---
+title: "Summary report for Operating Models"
+format: 
+  html:
+    theme: spacelab
+    toc: true
+    toc-location: left
+    toc-title: Contents
+    page-layout: full
+embed-resources: true
+fig-dpi: 300
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      verbose = FALSE,
+                      message = FALSE, 
+                      warning = FALSE)
+```
+
+```{r}
+require(knitr)
+require(ggplot2)
+require(dplyr)
+require(r4ss)
+require(tibble)
+require(tidyr)
+require(kableExtra)
+```
+
+```{r}
+save_par = readRDS('../data/summ_par.rds')
+save_dq = readRDS('../data/summ_dq.rds')
+save_ts = readRDS('../data/summ_ts.rds')
+save_kobe = readRDS('../data/summ_kobe.rds')
+```
+
+This report summarizes the estimated parameters, the calculated biological reference points, and the estimated stock status relative to those reference points for all the Reference OMs.
+
+## Operating Model Parametrization
+
+```{r}
+#| fig-cap: Values of natural mortality (M) and sigmaR selected for final operating models per weighting scenario (x-axis).
+#| fig-height: 3
+plot_data = save_par %>% select(M, sigmaR, mod_type, iter) %>% 
+  pivot_longer(cols = c('M', 'sigmaR'))
+ggplot(data = plot_data, aes(x = mod_type, y = value)) +
+  geom_violin(aes(fill = mod_type)) +
+  scale_fill_brewer(palette = 'Blues') +
+  theme_bw() +
+  xlab(NULL) + ylab('Parameter value') +
+  theme(legend.position = 'none', strip.background = element_blank()) +
+  facet_wrap(~ name, scales = 'free_y')
+```
+
+## Parameter Estimates
+
+### Growth
+
+```{r}
+#| fig-cap: Growth parameter estimates per weighting scenario. $L_1$ is the mean length at age 0.5.
+plot_data = save_par %>% select(LAmin, LAmax, K, SD1, SDA, mod_type, iter) %>% 
+  pivot_longer(cols = c('LAmin', 'LAmax', 'K', 'SD1', 'SDA'))
+plot_data = plot_data %>% mutate(name = factor(name, 
+                                               levels = c('LAmin', 'LAmax', 'K', 'SD1', 'SDA'),
+                                               labels = c(expression(L["1"]), 
+                                                          expression(L[infinity]), 
+                                                          "k", expression(SD[1]), expression(SD[A]))))
+ggplot(data = plot_data, aes(x = mod_type, y = value)) +
+  geom_violin(aes(fill = mod_type)) +
+  scale_fill_brewer(palette = 'Blues') +
+  theme_bw() +
+  xlab(NULL) + ylab('Parameter value') +
+  theme(legend.position = 'none', strip.background = element_blank()) +
+  facet_wrap(~ name, scales = 'free_y', labeller = 'label_parsed', ncol = 2)
+```
+
+### Stock-Recruitment
+
+```{r}
+#| fig-cap: Stock-recruitment parameter estimates per weighting scenario. $h$ is steepness.
+#| fig-height: 3
+plot_data = save_par %>% select(R0, h, mod_type, iter) %>% 
+  pivot_longer(cols = c('R0', 'h'))
+plot_data = plot_data %>% mutate(name = factor(name, 
+                                               levels = c('R0', 'h'),
+                                               labels = c(expression(R[0]), 
+                                                          "h")))
+ggplot(data = plot_data, aes(x = mod_type, y = value)) +
+  geom_violin(aes(fill = mod_type)) +
+  scale_fill_brewer(palette = 'Blues') +
+  theme_bw() +
+  xlab(NULL) + ylab('Parameter value') +
+  theme(legend.position = 'none', strip.background = element_blank()) +
+  facet_wrap(~ name, scales = 'free_y', labeller = 'label_parsed')
+```
+
+## Reference points
+
+```{r}
+#| fig-cap: Reference points per weighting scenario.
+plot_data = save_dq %>% filter(Label %in% c('SSB_Virgin', 'SSB_MSY', 'annF_MSY',
+                                                          'Dead_Catch_MSY'))
+plot_data = plot_data %>% mutate(Label = factor(Label, 
+                                               levels = c('SSB_Virgin', 'SSB_MSY', 'annF_MSY',
+                                                          'Dead_Catch_MSY'),
+                                               labels = c(expression(SSB[0]), 
+                                                          expression(SSB[msy]),
+                                                          expression(F[msy]),
+                                                          "MSY")))
+ggplot(data = plot_data, aes(x = mod_type, y = Value)) +
+  geom_violin(aes(fill = mod_type)) +
+  scale_fill_brewer(palette = 'Blues') +
+  theme_bw() +
+  xlab(NULL) + ylab('Value') +
+  theme(legend.position = 'none', strip.background = element_blank()) +
+  facet_wrap(~ Label, scales = 'free_y', labeller = 'label_parsed')
+```
+
+## Time Series
+
+### Spawning biomass (SSB)
+
+```{r}
+#| fig-cap: Time series of spawning biomass per weighting scenario. The continuous line indicates the median and the shadow area represents the 95% of the values across OMs.
+plot_data = save_ts %>% filter(var %in% "SSB")
+plot_data = plot_data %>% group_by(mod_type, year) %>%
+              summarise(q025 = quantile(Value, probs = 0.025), 
+                     q50 = quantile(Value, probs = 0.5),
+                     q975 = quantile(Value, probs = 0.975))
+ggplot(plot_data, aes(x = year, y = q50)) +
+    geom_line(color = "#08306B") +
+    geom_ribbon(aes(ymin = q025, ymax = q975), fill = "#9ECAE1", alpha = 0.3) +
+    theme_bw() +
+    ylab('Spawning biomass') + xlab('Year') +
+    theme(legend.position = 'none', strip.background = element_blank()) +
+    facet_wrap(~ mod_type) 
+```
+
+### Fishing mortality (F)
+
+```{r}
+#| fig-cap: Time series of fishing mortality (reported as exploitation rate in biomass) per weighting scenario. The continuous line indicates the median and the shadow area represents the 95% of the values across OMs.
+plot_data = save_ts %>% filter(var %in% "F")
+plot_data = plot_data %>% group_by(mod_type, year) %>%
+              summarise(q025 = quantile(Value, probs = 0.025), 
+                     q50 = quantile(Value, probs = 0.5),
+                     q975 = quantile(Value, probs = 0.975))
+ggplot(plot_data, aes(x = year, y = q50)) +
+    geom_line(color = "#08306B") +
+    geom_ribbon(aes(ymin = q025, ymax = q975), fill = "#9ECAE1", alpha = 0.3) +
+    theme_bw() +
+    scale_color_brewer(palette = 'Blues') +
+    scale_fill_brewer(palette = 'Blues') +
+    ylab('Fishing mortality (F)') + xlab('Year') +
+    theme(legend.position = 'none', strip.background = element_blank()) +
+    facet_wrap(~ mod_type) 
+```
+
+### $SSB/SSB_{msy}$
+
+```{r}
+#| fig-cap: Time series of spawning biomass relative to $SSB_{msy}$ per weighting scenario. The continuous line indicates the median and the shadow area represents the 95% of the values across OMs.
+plot_data = save_kobe %>% filter(var %in% "SSB")
+plot_data = plot_data %>% group_by(mod_type, year) %>%
+              summarise(q025 = quantile(Value, probs = 0.025), 
+                     q50 = quantile(Value, probs = 0.5),
+                     q975 = quantile(Value, probs = 0.975))
+ggplot(plot_data, aes(x = year, y = q50)) +
+    geom_line(color = "#08306B") +
+    geom_ribbon(aes(ymin = q025, ymax = q975), fill = "#9ECAE1", alpha = 0.3) +
+    geom_hline(yintercept = 1, linetype = 'dashed') +
+    theme_bw() +
+    scale_color_brewer(palette = 'Blues') +
+    scale_fill_brewer(palette = 'Blues') +
+    ylab(expression(SSB*'/'*SSB[msy])) + xlab('Year') +
+    theme(legend.position = 'none', strip.background = element_blank()) +
+    facet_wrap(~ mod_type) 
+```
+
+### $F/F_{msy}$
+
+```{r}
+#| fig-cap: Time series of fishing mortality (reported as exploitation rate in biomass) relative to $F_{msy}$ per weighting scenario. The continuous line indicates the median and the shadow area represents the 95% of the values across OMs.
+plot_data = save_kobe %>% filter(var %in% "F")
+plot_data = plot_data %>% group_by(mod_type, year) %>%
+              summarise(q025 = quantile(Value, probs = 0.025), 
+                     q50 = quantile(Value, probs = 0.5),
+                     q975 = quantile(Value, probs = 0.975))
+ggplot(plot_data, aes(x = year, y = q50)) +
+    geom_line(color = "#08306B") +
+    geom_ribbon(aes(ymin = q025, ymax = q975), fill = "#9ECAE1", alpha = 0.3) +
+    geom_hline(yintercept = 1, linetype = 'dashed') +
+    theme_bw() +
+    scale_color_brewer(palette = 'Blues') +
+    scale_fill_brewer(palette = 'Blues') +
+    ylab(expression(F*'/'*F[msy])) + xlab('Year') +
+    theme(legend.position = 'none', strip.background = element_blank()) +
+    facet_wrap(~ mod_type) 
+```
+

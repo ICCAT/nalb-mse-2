@@ -1,0 +1,234 @@
+---
+title: "Diagnostic report for Operating Model"
+format: 
+  html:
+    theme: spacelab
+    toc: true
+    toc-location: left
+    toc-title: Contents
+    page-layout: full
+embed-resources: true
+knitr:
+  opts_chunk:
+    out.width: "90%"
+params:
+  selmod: "1"
+  typemod: "BaseCase"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      verbose = FALSE,
+                      message = FALSE, 
+                      warning = FALSE)
+```
+
+```{r}
+require(knitr)
+require(ggplot2)
+require(dplyr)
+require(r4ss)
+require(tibble)
+require(kableExtra)
+```
+
+```{r}
+source('../../../sharepoint_path.R')
+mod = SS_output(dir = file.path(shrpoint_path, 'OM', params$typemod), 
+                repfile = paste0("Report_", params$selmod,".sso"),
+                compfile = paste0("CompReport_", params$selmod,".sso"),
+                forecast = FALSE, readwt = FALSE, warn = FALSE,
+                covar = FALSE, verbose = FALSE, printstats = FALSE)
+```
+
+## Operating Model Scenario
+
+```{r}
+#| tbl-cap: Configuration of the operating model.
+summ_tab = data.frame(weighting = params$typemod,
+                      M = round(mod$parameters[mod$parameters$Label == 'NatM_Lorenzen_Fem_GP_1', 'Value'], 3),
+                      sigmaR = round(mod$parameters[mod$parameters$Label == 'SR_sigmaR', 'Value'], 3))
+colnames(summ_tab) = c("Weighting", "NatM", "SR_sigmaR")
+rownames(summ_tab) = NULL
+knitr::kable(summ_tab)
+```
+
+## Objective Function Values
+
+### Overall
+
+```{r}
+#| tbl-cap: The total and component overall likelihood values.
+like_tab = mod$likelihoods_used %>% select(-lambdas)
+like_tab = like_tab %>% mutate(type = rownames(like_tab), .before = 'values')
+rownames(like_tab) = NULL
+kable(like_tab, col.names = NULL)
+```
+
+### By fleet
+
+```{r}
+#| tbl-cap: The total and component likelihood values for each fleet.
+like_f_tab = mod$likelihoods_by_fleet[c(2, 4, 6, 10, 14), ]
+rownames(like_f_tab) = like_f_tab$Label
+like_f_tab = like_f_tab %>% select(-Label)
+like_f_tab_rot = as.data.frame(t(like_f_tab))
+like_f_tab_rot = like_f_tab_rot %>% mutate(Fleet = rownames(like_f_tab_rot), .before = 'Catch_like')
+rownames(like_f_tab_rot) = NULL
+kable(like_f_tab_rot)
+```
+
+## Model Fits
+
+### Catch
+
+```{r}
+#| fig-cap: Fits (blue line) to the catch data (black dots) for all the fleets.
+these_fish = sort(unique(mod$catch$Fleet))
+these_labs = mod$FleetNames[these_fish]
+par(mfrow = c(4, 4))
+for(k in seq_along(these_fish)) {
+  tmp = mod$catch %>% filter(Fleet == these_fish[k])
+  par(mar = c(2.5, 2, 1, 0.5))
+  plot(tmp$Yr, tmp$Obs, pch = 19, xlab = '', ylab = '')
+  lines(tmp$Yr, tmp$Exp, col = 'blue')
+  title(these_labs[k])
+}
+```
+
+### CPUE
+
+```{r}
+#| fig-cap: Fits to the CPUE data. Each row corresponds with an index. The left-hand panels show the observed (dots) and model predicted (blue line) index in log-scale. The right-hand panels show the log deviations (the observation model is log-normal).
+#| fig-height: 9
+these_indices = sort(unique(mod$cpue$Fleet))
+these_labs = mod$FleetNames[these_indices]
+par(mfrow = c(length(these_indices), 2))
+for(k in seq_along(these_indices)) {
+  par(mar = c(2.5, 4, 0.5, 0.5))
+  SSplotIndices(mod, subplots = 5, fleets = these_indices[k],
+                labels = c("", these_labs[k], "Observed index", "Expected index", these_labs[k],
+                           "Log observed index", "Log expected index", "Standardized index", "Catchability (Q)",
+                           "Time-varying catchability", "Vulnerable biomass",
+                           "Catchability vs. vulnerable biomass", "Residual", "Deviation"))
+  par(mar = c(2.5, 2.5, 0.5, 0.5))
+  SSplotIndices(mod, subplots = 10, fleets = these_indices[k])
+}
+```
+
+### Length Compositions
+
+```{r}
+#| fig-cap: Model predicted length composition (green line) and observed length composition (grey area) aggregated over all years for each fleet.
+SSplotComps(mod, subplots = 21)
+```
+
+```{r}
+#| fig-cap: Length composition Pearson residuals showing residuals over time for each fleet. Closed bubbles are positive residuals (observed proportion is higher than expected) and open bubbles are negative residuals. The area of the bubble is proportional to the residual error.
+#| fig-height: 7
+these_fish = sort(unique(mod$len_comp_fit_table$Fleet))
+SSplotComps(mod, subplots = 24, fleets = these_fish[1:6])
+```
+
+```{r}
+#| fig-cap: Length composition Pearson residuals showing residuals over time for each fleet. Closed bubbles are positive residuals (observed proportion is higher than expected) and open bubbles are negative residuals. The area of the bubble is proportional to the residual error.
+#| fig-height: 7
+these_fish = sort(unique(mod$len_comp_fit_table$Fleet))
+SSplotComps(mod, subplots = 24, fleets = these_fish[7:12])
+```
+
+### Conditional Age-At-Length
+
+```{r}
+#| fig-cap: CAAL Pearson residuals showing residuals over time for fleet 1 (BB). Closed bubbles are positive residuals (observed proportion is higher than expected) and open bubbles are negative residuals. The area of the bubble is proportional to the residual error.
+these_fish = sort(unique(mod$Age_Comp_Fit_Summary$Fleet))
+these_labs = mod$FleetNames[these_fish]
+SSplotComps(mod, subplots = 3, fleets = these_fish, kind = "cond")
+title(these_labs)
+```
+
+## Stock-Recruitment
+
+```{r}
+#| fig-cap: Time series of spawning biomass and recruitment estimated by the model (upper figures). The lower figures show the stock-recruitment relationship (Beverton-Holt) and the estimated log recruitment deviates.
+plotdat = mod$timeseries %>% filter(Yr %in% mod$startyr:mod$endyr)
+par(mfrow = c(2,2))
+# SSB plot:
+par(mar = c(4, 4.5, 0.5, 0.5))
+plot(plotdat$Yr, plotdat$SpawnBio, pch = 19, xlab = '', 
+     ylab = 'Spawning biomass (t)', ylim = c(0, max(plotdat$SpawnBio)*1.1))
+lines(plotdat$Yr, plotdat$SpawnBio)
+# Recruits:
+par(mar = c(4, 4.5, 0.5, 0.5))
+plot(plotdat$Yr, plotdat$Recruit_0, pch = 19, xlab = '', 
+     ylab = 'Recruitment (1,000s)', ylim = c(0, max(plotdat$Recruit_0)*1.1))
+lines(plotdat$Yr, plotdat$Recruit_0)
+# SR plots:
+SSplotSpawnrecruit(mod, subplots = 1, legend = FALSE)
+SSplotRecdevs(mod, subplots = 1)
+```
+
+## Selectivity
+
+```{r}
+#| fig-cap: The estimated selectivity-at-length for all the fleets in the terminal year of the assessment model. The x-axis represents the fish length (cm) and the y-axis is the selectivity value.
+par(mfrow = c(4,4))
+for(i in 1:mod$nfleets) {
+  SSplotSelex(mod, fleets = i, subplots = 9, 
+              labels = c("", "Age (yr)", "Year", 
+                         "", "Retention", 
+                         "Discard mortality"),
+              mar = c(2.5, 2, 1, 0.5), mainTitle = FALSE)
+  title(mod$definitions$Fleet_name[i])
+}
+```
+
+## Stock Status
+
+### Reference Points
+
+```{r}
+#| tbl-cap: The biological reference points.
+# WARNING!: Check F reporting method
+options(scipen=999, digits=2)
+df1 = mod$derived_quants %>% 
+  filter(Label %in% c('Dead_Catch_MSY', 'SSB_MSY', 'annF_MSY')) %>% 
+  select(Label, Value)
+df2 = mod$derived_quants %>% filter(Label %in% paste0(c('SSB_', 'F_'), mod$endyr)) %>% select(Label, Value)
+df2$Value = df2$Value/df1$Value[1:2]
+df = rbind(df1, df2)
+df_print = as.data.frame(t(df))
+colnames(df_print) = c("$SSB_{MSY}$", "$F_{MSY}$", "$MSY$", "$SSB_{2021}/SSB_{MSY}$", "$F_{2021}/F_{MSY}$")
+df_print = df_print[-1, ]
+rownames(df_print) = NULL
+tibble::tibble(df_print) %>% knitr::kable(escape = FALSE)
+```
+
+### Kobe Plot
+
+```{r}
+#| fig-cap: Kobe Plot
+# WARNING!: Check F reporting method
+datapoly = data.frame(id = rep(1:4, each = 5), 
+                      x = c(1,1,20,20,1,-1,-1,1,1,-1,-1,-1,1,1,-1,1,1,20,20,1),
+                      y = c(1,-1,-1,1,1,1,-1,-1,1,1,20,1,1,20,20,20,1,1,20,20))
+base_Kobe = mod$Kobe %>% dplyr::filter(Yr %in% mod$startyr:mod$endyr)
+base_Kobe$`F.Fmsy` = base_Kobe$`F.Fmsy`/df["annF_MSY", "Value"]
+p1 = ggplot(data = datapoly, aes(x = x, y = y)) +
+  geom_polygon(aes(fill = factor(id), group = factor(id)), alpha = 0.45) +
+  geom_point(data = base_Kobe, aes(x = B.Bmsy, y = F.Fmsy), size = 1.5) +
+  geom_path(data = base_Kobe, aes(x = B.Bmsy, y = F.Fmsy)) +
+  geom_text(data = base_Kobe %>% dplyr::filter(Yr %in% seq(from = mod$startyr, to = mod$endyr, by = 10)), 
+            aes(x = B.Bmsy, y = F.Fmsy, label = Yr), size = 3, hjust = 0, nudge_x = 0.02) +
+  theme_bw() +
+  ylab(expression('F/'*F[msy])) + xlab(expression('SSB/'*SSB[msy])) +
+  coord_cartesian(xlim = c(0,3.5), ylim = c(0,2.5)) +
+  theme(legend.direction="horizontal",
+        legend.background = element_rect(fill='transparent'),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 10),
+        strip.background = element_blank()) +
+  guides(fill = 'none') +
+  scale_fill_manual(values = c('#8cff66', '#ffff00', '#ff3300', '#ff9900'))
+print(p1)
+```
