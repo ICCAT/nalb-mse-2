@@ -15,7 +15,7 @@ title-block-banner-color: "#FFFFFF"
 css: azti.css
 bibliography: references.bib
 csl: elsevier-harvard.csl
-embed-resources: true
+embed-resources: false
 html-table-processing: none
 theme:
   - azti.scss

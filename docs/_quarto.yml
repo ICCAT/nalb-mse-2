@@ -1,0 +1,13 @@
+project:
+  type: website
+  render:
+    - "!TechSpec/om_check/*.qmd"
+    - "!TechSpec/om_report/*.qmd"
+
+website:
+  title: "MSE Specifications"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+
