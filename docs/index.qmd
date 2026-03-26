@@ -19,15 +19,15 @@ theme:
 
 ## Introduction
 
-Welcome to the North Atlantic Albacore (NALB, *Thunnus alalunga*) MSE homepage.
+Welcome to the North Atlantic Albacore (N-ALB, *Thunnus alalunga*) MSE homepage.
 
-This site contains links to documents, reports, and presentations related to the management strategy evaluation (MSE) process for NALB.
+This site contains links to documents, reports, and presentations related to the management strategy evaluation (MSE) process for N-ALB.
 
 The MSE is being conducted with the open-source [FLBEIA](https://github.com/flr/FLBEIA) framework. The code for the NALB MSE is available in the [MSE GitHub repository](https://github.com/ICCAT/nalb-mse-2).
 
 ## MSE Trial Specification Document
 
-This document describes the specifications for the operating models (OMs), candidate management procedures (CMPs), and performance indicators (PIs) that have been proposed and developed for the NALB fishery. It is a living document and will be continued to be updated so that it reflects the current state of the NALB MSE process.
+This document describes the specifications for the operating models (OMs), candidate management procedures (CMPs), and performance indicators (PIs) that have been proposed and developed for the NALB fishery. It is a living document and will be continued to be updated so that it reflects the current state of the N-ALB MSE process.
 
 The document can be found [here](https://iccat.github.io/nalb-mse-2/TechSpec/Trial_Specs.html).
 
@@ -35,5 +35,5 @@ The document can be found [here](https://iccat.github.io/nalb-mse-2/TechSpec/Tri
 
 This application presents the main MSE results by using the FLBEIA Shiny App.
 
-The application can be found [here](https://gmoroncorrea.shinyapps.io/shiny-flbeia/).
+The application can be found [here](https://aztigps.shinyapps.io/shiny-flbeia/?dataset=ALB).
 

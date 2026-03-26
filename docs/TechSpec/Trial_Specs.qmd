@@ -102,7 +102,7 @@ This document describes the specifications for the OMs, CMPs, and PIs that have 
 
 The document is written using the [Quarto](https://quarto.org/) format and can edited in any text editor. The source document is available on the [MSE GitHub repository](https://github.com/ICCAT/nalb-mse-2). ALBSG members can make edits to the document either directly in the online repository or by cloning the repository and submitting pull requests with their edits. Alternatively, they can email questions or comments to [the MSE developers](mailto:aurtizberea@azti.es). The former approach has the advantage that all comments, questions, and edits are immediately visible to all members of the ALBSG. The [Discussions feature](https://docs.github.com/en/discussions/quickstart#creating-a-new-discussion) on the Github repository can also be used to post questions, comments, or points for discussion related to any aspect of this document or the MSE process in general.
 
-This document is available at the N-ALB MSE homepage.
+This document is available at the [N-ALB MSE homepage](https://iccat.github.io/nalb-mse-2/).
 
 ## MSE framework
 
