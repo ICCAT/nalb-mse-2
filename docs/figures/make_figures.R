@@ -5,7 +5,7 @@ require(gridExtra)
 require(caret)
 require(tidyr)
 source('sharepoint_path.R')
-fig_dir = 'docs/TechSpec/figures'
+fig_dir = 'docs/figures'
 
 # Read SS3 model
 mymod = SS_output(file.path(shrpoint_path, "Assessment/Assessment_2023/ALB_SS3_FinalVersionRecDev2018/v28_forecast3_relf_v5_Fmsy08_2018_v3"))
@@ -123,6 +123,38 @@ p2 = ggplot(data = datapoly, aes(x = x, y = y)) +
   facet_grid(ffmsy_t ~ bbmsy_t, labeller = label_parsed )
 ggsave(filename = file.path(fig_dir, 'hcr_combs.png'), plot = p2, 
        width = 170, height = 170, units = "mm", dpi = 300)
+
+# -------------------------------------------------------------------------
+# Figure HCR by case:
+mydat = as.data.frame(expand.grid(ffmsy = c(0.8, 1), bbmsy = c(1)))
+mydat = mydat %>% mutate(bbmsy_t = factor(bbmsy, levels = c(1), 
+                                          labels = c(expression(B[thr]*"="*B[msy]))),
+                         ffmsy_t = factor(ffmsy, levels = c(0.8, 1), 
+                                          labels = c(expression(F[tgt]*"=0.8"*F[msy]),
+                                                     expression(F[tgt]*"="*F[msy]))))
+
+p2 = ggplot(data = datapoly, aes(x = x, y = y)) +
+  geom_polygon(aes(fill = factor(id), group = factor(id)), alpha = 0.45) +
+  geom_segment(x = 0, y = 0.1, xend = 0.4, yend = 0.1, color = 'black') +
+  geom_segment(data = mydat, aes(x = 0.4, y = 0.1, xend = bbmsy, yend = ffmsy), color = 'black') +
+  geom_segment(data = mydat, aes(x = bbmsy, y = ffmsy, xend = 3, yend = ffmsy), color = 'black') +
+  theme_bw() +
+  ylab(NULL) + xlab(NULL) +
+  coord_cartesian(xlim = c(0,2), ylim = c(0,2)) +
+  scale_x_continuous(expand = c(0, 0), breaks = c(0.4, 1), labels = c(expression(B[lim]), expression(B[msy]))) +
+  scale_y_continuous(expand = c(0, 0), breaks = c(0.1, 1), labels = c(expression(F[min]), expression(F[msy]))) +
+  theme(legend.direction="horizontal",
+        legend.background = element_rect(fill='transparent'),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 10),
+        strip.text = element_text(size = 12),
+        strip.background = element_blank()) +
+  guides(fill = 'none') +
+  scale_fill_manual(values = c('#8cff66', '#ffff00', '#ff3300', '#ff9900')) +
+  facet_grid(ffmsy_t ~ bbmsy_t, labeller = label_parsed )
+ggsave(filename = file.path(fig_dir, 'hcr_combs_2.png'), plot = p2, 
+       width = 85, height = 130, units = "mm", dpi = 300)
 
 
 # -------------------------------------------------------------------------

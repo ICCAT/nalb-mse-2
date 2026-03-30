@@ -260,9 +260,9 @@ mytab |> gt() |>
 
 ## Candidate Management Procedures
 
-### Pseudo-constant catch
+### Pseudo-constant catch (PCCatch)
 
-The total allowable catch (TAC) for the next management period ($t$) is assumed constant, unless a reference value ($I_{G}$) derived from a group of indices of abundance in the last two years falls below a reference value $I_{ref}=0.91$:
+The total allowable catch (TAC) for the next management period ($t$) is assumed constant, unless a reference value ($I_{G}$) derived from a group of indices of abundance in the last two years falls below a reference value $I_{ref}=0.91$ (value in 2010, when $SSB>SSB_{msy}$):
 
 $$TAC_t =
 \begin{cases}
@@ -278,16 +278,16 @@ where $n_i$ is the number of selected indices of abundance and $I^*_i$ was calcu
 
 $$I^*_i = \frac{I_{i,y}+I_{i,y-1}}{2}$$
 
-For this case, the indices of abundance $I_i$ that we used were: 
+For this case, the indices of abundance $I_i$ that we used were:
 
-- Baitboat
-- Japan Longline South
-- Taiwan Longline North
-- Taiwan Longline South 
-- U.S. Longline North
-- U.S. Longline South. 
+-   Baitboat
+-   Japan Longline South
+-   Taiwan Longline North
+-   Taiwan Longline South
+-   U.S. Longline North
+-   U.S. Longline South.
 
-In addition, $TAC_{t} = TAC_{t-1}$ if the difference between $TAC_{t}$ and $TAC_{t-1}$ was larger than 15%.
+In addition, $TAC_{t} = \pm 15\% TAC_{t-1}$ if the difference between $TAC_{t}$ and $TAC_{t-1}$ was larger than 15% and $I_G < I_{ref}$.
 
 ### Index-based
 
@@ -308,7 +308,7 @@ where $n_i$ is the number of selected indices of abundance and $I^*_i$ was calcu
 
 $$I^*_i = \frac{(I_{i,y-1}+I_{i,y-2})/2}{I_{ref}}$$
 
-and $I_{ref}=1$. In addition, $TAC_{t} = TAC_{max}$ when $TAC_{t} > TAC_{max}$, where $TAC_{max} = 50,000$ tonnes. Also, $TAC_{t} = TAC_{t-1}$ if the difference between $TAC_{t}$ and $TAC_{t-1}$ was larger than 15%.
+and $I_{ref}=1$ (value in 2012, when $SSB>SSB_{msy}$). In addition, $TAC_{t} = TAC_{max}$ when $TAC_{t} > TAC_{max}$, assuming that $TAC_{max} = 50,000$ tonnes. Also, $TAC_{t} = \pm 15\% TAC_{t-1}$ if the difference between $TAC_{t}$ and $TAC_{t-1}$ was larger than 15%.
 
 ### Model-based
 
@@ -318,10 +318,12 @@ Simulated data was included in a stochastic surplus production model in continuo
 
 The management advice is given every three years (*management period*) and the total allowable catch (TAC) is derived from a harvest control rule (HCR, @fig-hcr). 
 
-In the HCR, $F_{tgt}$ and $B_{thr}$ need to be defined, and the following options were tested:
+In the HCR, $F_{tgt}$ and $B_{thr}$ need to be defined, and the following options were tested (@fig-combs):
 
 - $F_{tgt}=0.8F_{msy}$ and $B_{thr}=B_{msy}$
 - $F_{tgt}=F_{msy}$ and $B_{thr}=B_{msy}$
+
+![Example of harvest control rule (HCR).](../figures/hcr_combs_2.png){#fig-combs width="55%"}
 
 In addition, $B_{lim}=0.4\times B_{msy}$ and $F_{mim}=0.1\times F_{msy}$ for all cases. These MPs were divided into two groups, depending on the maximum allowed variation between $TAC_{t}$ and $TAC_{t-1}$: 
 
@@ -354,7 +356,7 @@ Each PI was calculated for every Reference OM (i.e., 400 PIs). Examples of each 
 | Yield | Mean catch (short term) | $Cstr$ | Mean catch from 1 to 3 years |
 | Yield | Mean catch (medium term) | $Cmed$ | Mean catch from 5 to 10 years |
 | Yield | Mean catch (long term) | $Clon$ | Mean catch from 15 to 25 years |
-| Stability | Mean absolute proportional change in catch | $Cc$ | Mean of $\mid\frac{C_y - C_{y-1}}{C_{y-1}}\mid$ |
+| Stability | Mean absolute proportional change (%) in catch | $Cc$ | Mean of $\mid\frac{C_y - C_{y-1}}{C_{y-1}}\mid$ |
 | Stability | Standard deviation in catch | $Csd$ | Catch standard deviation |
 | Stability | Probability of shutdown | $PShw$ | Proportion of years that TAC=0 |
 | Stability | Probability of TAC change over a certain level | $PTcx$ | Proportion of management cycles when the ratio of change $\frac{TAC_y - TAC_{y-1}}{TAC_{y-1}} > 10\%$ |
