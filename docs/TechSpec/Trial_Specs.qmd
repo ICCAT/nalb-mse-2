@@ -262,7 +262,7 @@ mytab |> gt() |>
 
 ### Pseudo-constant catch (PCCatch)
 
-The total allowable catch (TAC) for the next management period ($t$) is assumed constant, unless a reference value ($I_{G}$) derived from a group of indices of abundance in the last two years falls below a reference value $I_{ref}=0.91$ (value in 2010, when $SSB>SSB_{msy}$):
+The total allowable catch (TAC) for the next management period ($t$) is assumed constant, unless a reference value ($I_{G}$) derived from a group of indices of abundance in the last two years falls below a reference value $I_{ref}=0.91$ (value observed in 2010, when $SSB>SSB_{msy}$):
 
 $$TAC_t =
 \begin{cases}
@@ -270,7 +270,7 @@ TAC_{max}, & \text{if }I_{G} \geq I_{ref} \\
 TAC_{max}(\frac{I_{G}}{I_{ref}}), & \text{if }I_{G} < I_{ref}
 \end{cases}$$
 
-where $TAC_{max}=42,000$ tonnes. $I_{G}$ was calculated as follows:
+where $TAC_{max}=42,000$ tonnes (@fig-pcc). $I_{G}$ was calculated as follows:
 
 $$I_G = exp(\frac{1}{n_i}\sum_{i}log(I^*_i))$$
 
@@ -278,16 +278,18 @@ where $n_i$ is the number of selected indices of abundance and $I^*_i$ was calcu
 
 $$I^*_i = \frac{I_{i,y}+I_{i,y-1}}{2}$$
 
-For this case, the indices of abundance $I_i$ that we used were:
+For this case, the selected indices of abundance $I_i$ were (see @tbl-fleet for fleet description):
 
--   Baitboat
--   Japan Longline South
--   Taiwan Longline North
--   Taiwan Longline South
--   U.S. Longline North
--   U.S. Longline South.
+-   $1\_BB$
+-   $6\_JPLL\_S$
+-   $7\_TAILL\_N$
+-   $8\_TAILL\_S$
+-   $9\_USLL\_N$
+-   $10\_USLL\_S$
 
-In addition, $TAC_{t} = \pm 15\% TAC_{t-1}$ if the difference between $TAC_{t}$ and $TAC_{t-1}$ was larger than 15% and $I_G < I_{ref}$.
+In addition, the TAC variation between consecutive management periods $TAC_{t}$ and $TAC_{t-1}$ could not exceed 15% when $I_G < I_{ref}$.
+
+![Derivation of the TAC in the following management period ($TAC_t$) in the pseudoconstant catch MP.](../figures/pccatch.png){#fig-pcc width="55%"}
 
 ### Index-based
 
@@ -300,7 +302,7 @@ TAC_{t-1}, & \text{if }(1-\alpha) \leq I_{G} \leq (1+\alpha) \\
 (1-\beta)TAC_{t-1}, & \text{if }I_{G} < (1-\alpha)
 \end{cases}$$
 
-where we assumed $\alpha=0.15$ and $\beta=0.15$. In this case, $I_{G}$ was calculated as:
+where we assumed $\alpha=0.15$ and $\beta=0.15$ (@fig-ibased). In this case, $I_{G}$ was calculated as:
 
 $$I_G = exp(\frac{1}{n_i}\sum_{i}log(I^*_i))$$
 
@@ -308,13 +310,15 @@ where $n_i$ is the number of selected indices of abundance and $I^*_i$ was calcu
 
 $$I^*_i = \frac{(I_{i,y-1}+I_{i,y-2})/2}{I_{ref}}$$
 
-and $I_{ref}=1$ (value in 2012, when $SSB>SSB_{msy}$). In addition, $TAC_{t} = TAC_{max}$ when $TAC_{t} > TAC_{max}$, assuming that $TAC_{max} = 50,000$ tonnes. Also, $TAC_{t} = \pm 15\% TAC_{t-1}$ if the difference between $TAC_{t}$ and $TAC_{t-1}$ was larger than 15%.
+and $I_{ref}=1$ (value observed in 2012, when $SSB>SSB_{msy}$). In addition, $TAC_{t} = TAC_{max}$ when $TAC_{t} > TAC_{max}$, assuming that $TAC_{max} = 50,000$ tonnes. Also, the TAC variation between consecutive management periods $TAC_{t}$ and $TAC_{t-1}$ could not exceed 15%.
+
+![Derivation of the TAC in the following management period ($TAC_t$) in the index-based MP.](../figures/index_based.png){#fig-ibased width="55%"}
 
 ### Model-based
 
 Simulated data was included in a stochastic surplus production model in continuous time (SPiCT). SPiCT is a full state-space model, where biomass and fishing dynamics are modelled as states, which are observed indirectly through biomass indices and commercial catches sampled with error [@pedersenStochasticSurplusProduction2017]. SPiCT calculates maximum sustainable yield (MSY) reference points and is able to make short-term projections. SPiCT is the estimation method in the MSE.
 
-![Example of harvest control rule (HCR).](../figures/hcr_example.png){#fig-hcr width="55%"}
+![Example of harvest control rule (HCR) in model-based MPs.](../figures/hcr_example.png){#fig-hcr width="55%"}
 
 The management advice is given every three years (*management period*) and the total allowable catch (TAC) is derived from a harvest control rule (HCR, @fig-hcr). 
 

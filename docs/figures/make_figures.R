@@ -60,6 +60,53 @@ p1 = ggplot(plot_data, aes(x=value))+
 ggsave(filename = file.path(fig_dir, 'par_sample.png'), plot = p1, 
        width = 150, height = 75, units = "mm", dpi = 300)
 
+
+# -------------------------------------------------------------------------
+# Pseudoconstant Catch MP:
+
+p1 = ggplot() +
+  geom_blank(aes(x = c(0, 10), y = c(0, 10))) +
+  geom_segment(aes(x = 0, y = 0, xend = 1, yend = 1), linewidth = 1) +
+  geom_segment(aes(x = 1, y = 1, xend = 10, yend = 1), linewidth = 1) +
+  geom_segment(aes(x = 1, y = 1, xend = 1, yend = 0), linewidth = 0.5, color = "red", linetype = "dashed", alpha = 0.5) +
+  geom_segment(aes(x = 1, y = 1, xend = 0, yend = 1), linewidth = 0.5, color = "red", linetype = "dashed", alpha = 0.5) +
+  annotate("text", x = 1.25, y = 0.5, label = expression("~f("*TAC[max]*")")) +
+  geom_curve(
+    aes(x = 1.25, y = 0.47, xend = 0.42, yend = 0.4),
+    curvature = -0.3, arrow = arrow(length = unit(0.2, "cm")), linewidth = 0.5 ) +
+  scale_x_continuous(breaks = c(0, 1), labels = c("0", expression(I[ref]))) +
+  scale_y_continuous(breaks = c(0, 1), labels = c("0", expression(TAC[max]))) +
+  coord_cartesian(xlim = c(0,1.5), ylim = c(0,1.2), expand = c(0,0)) +
+  theme_classic() +
+  ylab(expression(TAC[t])) + xlab(expression(I[G]))
+ggsave(filename = file.path(fig_dir, 'pccatch.png'), plot = p1, 
+       width = 80, height = 70, units = "mm", dpi = 300)
+
+# -------------------------------------------------------------------------
+# Index-based MP:
+
+p1 = ggplot() +
+  geom_blank(aes(x = c(0, 10), y = c(0, 10))) +
+  geom_segment(aes(x = 1, y = 1, xend = 10, yend = 1), linewidth = 1) +
+  geom_segment(aes(x = 0.75, y = 0.5, xend = 1, yend = 1), linewidth = 1) +
+  geom_segment(aes(x = 0.25, y = 0.5, xend = 0.75, yend = 0.5), linewidth = 1) +
+  geom_segment(aes(x = 0, y = 0, xend = 0.25, yend = 0.5), linewidth = 1) +
+  geom_segment(aes(x = 0, y = 1, xend = 1, yend = 1), linewidth = 0.5, color = "red", linetype = "dashed", alpha = 0.5) +
+  geom_segment(aes(x = 0.75, y = 0, xend = 0.75, yend = 0.5), linewidth = 0.5, color = "red", linetype = "dashed", alpha = 0.5) +
+  geom_segment(aes(x = 0.25, y = 0, xend = 0.25, yend = 0.5), linewidth = 0.5, color = "red", linetype = "dashed", alpha = 0.5) +
+  annotate("text", x = 1.1, y = 0.45, label = expression("~f("*TAC[t-1]*")")) +
+  geom_curve(
+    aes(x = 1.1, y = 0.4, xend = 0.55, yend = 0.48),
+    curvature = -0.3, arrow = arrow(length = unit(0.2, "cm")), linewidth = 0.5 ) +
+  scale_x_continuous(breaks = c(0, 0.25, 0.75), labels = c("0", expression("1-"*alpha), expression("1+"*alpha))) +
+  scale_y_continuous(breaks = c(0, 1), labels = c("0", expression(TAC[max]))) +
+  coord_cartesian(xlim = c(0,1.5), ylim = c(0,1.2), expand = c(0,0)) +
+  theme_classic() +
+  ylab(expression(TAC[t])) + xlab(expression(I[G]))
+ggsave(filename = file.path(fig_dir, 'index_based.png'), plot = p1, 
+       width = 80, height = 70, units = "mm", dpi = 300)
+
+
 # -------------------------------------------------------------------------
 # Figure HCR example:
 p1 = ggplot(data = datapoly, aes(x = x, y = y)) +
@@ -234,7 +281,7 @@ p4 = ggplot(data = datapoly, aes(x = x, y = y)) +
         strip.background = element_blank()) +
   guides(fill = 'none') +
   scale_fill_manual(values = c('#8cff66', '#ffff00', '#ff3300', '#ff9900')) +
-  annotate("text", x = 1, y = 1.9, label = "pGreen",  size = 3, color = 'blue')
+  annotate("text", x = 1, y = 1.9, label = "PGK",  size = 3, color = 'blue')
 
 p5 = ggplot(data = datapoly, aes(x = x, y = y)) +
   geom_polygon(aes(fill = factor(id), group = factor(id)), alpha = 0.45) +
@@ -253,7 +300,7 @@ p5 = ggplot(data = datapoly, aes(x = x, y = y)) +
         strip.background = element_blank()) +
   guides(fill = 'none') +
   scale_fill_manual(values = c('#8cff66', '#ffff00', '#ff3300', '#ff9900')) +
-  annotate("text", x = 1, y = 1.9, label = "pRed",  size = 3, color = 'blue')
+  annotate("text", x = 1, y = 1.9, label = "PGR",  size = 3, color = 'blue')
 
 # Merge status plots:
 merged_plot = grid.arrange(p1, p2, p3, p4, p5, ncol = 3)
@@ -269,7 +316,7 @@ p6 = ggplot(data = exvec, aes(x = Yr_sim, y = Bio_all)) +
   scale_y_continuous(breaks = Blim, labels = expression(B[lim])) +
   theme(legend.position = 'none',
         axis.text.x=element_blank(), axis.ticks.x=element_blank()) +
-  annotate("text", x = 15, y = 1.8, label = "pBlim", 
+  annotate("text", x = 15, y = 1.8, label = "PBlim", 
            size = 3, color = 'blue')
 
 p7 = ggplot(data = exvec, aes(x = Yr_sim, y = Bio_all)) +
@@ -281,7 +328,7 @@ p7 = ggplot(data = exvec, aes(x = Yr_sim, y = Bio_all)) +
   scale_y_continuous(breaks = c(Blim, Bmsy), labels = c(expression(B[lim]), expression(B[msy]))) +
   theme(legend.position = 'none',
         axis.text.x=element_blank(), axis.ticks.x=element_blank()) +
-  annotate("text", x = 15, y = 1.8, label = "pBmsy", 
+  annotate("text", x = 15, y = 1.8, label = "PBmsy", 
            size = 3, color = 'blue')
 
 # Merge safety plots:
@@ -302,7 +349,7 @@ p8 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
   theme_bw() + ylab("Catch (t)") + xlab(x_lab) +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(),
         axis.text.x=element_blank(), axis.ticks.x=element_blank()) +
-  annotate("text", x = 15, y = 4, label = "Csht", 
+  annotate("text", x = 15, y = 4, label = "Cstr", 
            size = 3, color = 'blue', parse = TRUE)
 
 p9 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
@@ -370,7 +417,7 @@ p13 = ggplot(data = plot_df3, aes(x = Yr_sim, y = catch)) +
   scale_y_continuous(breaks = 0) +
   theme(legend.position = 'none',
         axis.text.x=element_blank(), axis.ticks.x=element_blank()) +
-  annotate("text", x = 15, y = 4, label = "pShw", 
+  annotate("text", x = 15, y = 4, label = "PShw", 
            size = 3, color = 'blue')
 
 plot_df4 = exvec %>% select(Yr_sim, catch)
@@ -394,7 +441,7 @@ p14 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
         axis.text.x=element_blank(), axis.ticks.x=element_blank(),
         legend.position = "none") +
-  annotate("text", x = 15, y = 4, label = "pTX", 
+  annotate("text", x = 15, y = 4, label = "PTcx", 
            size = 3, color = 'blue')
 
 p15 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
@@ -406,7 +453,7 @@ p15 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
   scale_x_continuous(breaks = seq(10, 30, 10)) +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(),
         axis.text.x=element_blank(), axis.ticks.x=element_blank()) +
-  annotate("text", x = 15, y = 4, label = "maxTc", 
+  annotate("text", x = 15, y = 4, label = "Tcmax", 
            size = 3, color = 'blue', parse = T)
 
 # Merge stability plots:
