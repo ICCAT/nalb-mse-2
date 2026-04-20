@@ -1,0 +1,64 @@
+## MSE FRAMEWORK
+
+%%{init: {
+  "themeVariables": {
+    "fontSize": "22px"
+  }
+}}%%
+
+flowchart TB
+    subgraph B1[" "]
+        direction TB
+        i1["Biological and <br> fishery model"]
+        f1["Data generation <br> (Observation Error Model, OEM)"]
+        t1["Operating model (OM)"]:::titleBottom
+    end
+
+    subgraph B2[" "]
+        direction RL
+        i2["Estimation method"] 
+        f2["Harvest control rule (HCR)"]
+        f3["Total Allowable Catch (TAC)"]
+        t2["Management Procedure (MP)"]:::titleBottom
+    end
+    f1 --> i2
+    f2 --> f3 --Implementation--> i1
+    i1 --> f1
+    i2 --> f2
+    B1 --> i3["Performance indicators (PIs)"]
+    style B1 fill:#d4f5ba
+    style B2 fill:#b9c8fc
+    style i3 fill:#fcf7b9
+    style i1 fill:#ffffff
+    style f1 fill:#ffffff
+    style i2 fill:#ffffff
+    style f2 fill:#ffffff
+    style f3 fill:#ffffff
+    
+    %% Set all nodes to black text
+    linkStyle default color:#000000
+    classDef blackText color:#000000;
+    class i1,f1,i2,f2,f3,i3,B1,B2 blackText;
+    style i2 stroke-dasharray: 5 5
+    classDef titleBottom fill:none,stroke:none,color:#000,font-weight:bold;
+
+## TIMELINE HCR:
+
+%%{init: {
+  "themeVariables": {
+    "fontSize": "23px",
+    "timelineFontSize": "20px"
+  }
+}}%%
+
+timeline
+    section Previous Management Periods
+        ... : Data available for MP
+    section Current <br> Management Period (t)
+        y-2 : Data available for MP
+        y-1 : Data available for MP
+        y (present) : Run MP
+    section Next <br> Management Period (t+1)
+        y+1 : Apply TAC from MP
+        y+2 : Apply TAC from MP
+        y+3 : Apply TAC from MP

@@ -78,7 +78,7 @@ p1 = ggplot() +
   scale_y_continuous(breaks = c(0, 1), labels = c("0", expression(TAC[max]))) +
   coord_cartesian(xlim = c(0,1.5), ylim = c(0,1.2), expand = c(0,0)) +
   theme_classic() +
-  ylab(expression(TAC[t])) + xlab(expression(I[G]))
+  ylab(expression(TAC["t+1"])) + xlab(expression(I[G]))
 ggsave(filename = file.path(fig_dir, 'pccatch.png'), plot = p1, 
        width = 80, height = 70, units = "mm", dpi = 300)
 
@@ -94,16 +94,56 @@ p1 = ggplot() +
   geom_segment(aes(x = 0, y = 1, xend = 1, yend = 1), linewidth = 0.5, color = "red", linetype = "dashed", alpha = 0.5) +
   geom_segment(aes(x = 0.75, y = 0, xend = 0.75, yend = 0.5), linewidth = 0.5, color = "red", linetype = "dashed", alpha = 0.5) +
   geom_segment(aes(x = 0.25, y = 0, xend = 0.25, yend = 0.5), linewidth = 0.5, color = "red", linetype = "dashed", alpha = 0.5) +
-  annotate("text", x = 1.1, y = 0.45, label = expression("~f("*TAC[t-1]*")")) +
+  annotate("text", x = 1.1, y = 0.45, label = expression("~f("*TAC[t]*")")) +
   geom_curve(
     aes(x = 1.1, y = 0.4, xend = 0.55, yend = 0.48),
     curvature = -0.3, arrow = arrow(length = unit(0.2, "cm")), linewidth = 0.5 ) +
-  scale_x_continuous(breaks = c(0, 0.25, 0.75), labels = c("0", expression("1-"*alpha), expression("1+"*alpha))) +
+  scale_x_continuous(breaks = c(0, 0.25, 0.75), labels = c("0", expression("(1-"*alpha*")"*I[ref]), expression("(1+"*alpha*")"*I[ref]))) +
   scale_y_continuous(breaks = c(0, 1), labels = c("0", expression(TAC[max]))) +
   coord_cartesian(xlim = c(0,1.5), ylim = c(0,1.2), expand = c(0,0)) +
   theme_classic() +
-  ylab(expression(TAC[t])) + xlab(expression(I[G]))
+  ylab(expression(TAC["t+1"])) + xlab(expression(I[G]))
 ggsave(filename = file.path(fig_dir, 'index_based.png'), plot = p1, 
+       width = 80, height = 70, units = "mm", dpi = 300)
+
+
+# -------------------------------------------------------------------------
+# Derivation of I_G from set of indices:
+
+cpue_vals = c(0.99, 0.98, 0.95, 1, 0.97, 1.04, 1.03, 1.09, 1.05, NA) # Always NA at the end
+n_vals = length(cpue_vals) # n cpue vals to be simulated
+
+df1 = data.frame(cpue = cpue_vals)
+df1 = df1 %>% mutate(time = 1:n_vals, type = "Index_1")
+df2 = df1
+df2$cpue = df2$cpue * rnorm(n = n_vals, mean = 1, sd = 0.02)
+df2$type = "Index_2"
+df3 = df1
+df3$cpue = df3$cpue * rnorm(n = n_vals, mean = 1, sd = 0.02)
+df3$type = "Index_3"
+# Merge:
+cpue_df = rbind(df1, df2, df3)
+# Find CPUE combined I_G:
+Ig_df = cpue_df %>% filter(time %in% (n_vals-2):(n_vals-1))
+
+p1 = ggplot(data = data.frame(x = c(n_vals-2-0.25, n_vals-2-0.25, n_vals+0.25, n_vals+0.25, n_vals-2-0.25),
+                              y = c(-10, 10, 10, -10, -10))) +
+  geom_polygon(aes(x = x, y = y), fill = "gray50", alpha = 0.25) +
+  geom_line(data = cpue_df, aes(x = time, y = cpue, color = type)) +
+  annotate("text", x = n_vals-1, y = 0.92, label = "Current\nManagement\nPeriod (t)", size = 2.5) +
+  annotate("text", x = n_vals-1.5, y = 1.06, label = expression(I[G]), size = 3.5, color = "red") +
+  scale_color_brewer(palette = "YlGnBu") +
+  geom_point(data = Ig_df, aes(x = time, y = cpue), color = 'red', size = 1.5) +
+  coord_cartesian(ylim = c(0.9, 1.1)) +
+  theme_classic() +
+  scale_x_continuous(breaks = (n_vals-2):n_vals, labels = c("y-2", "y-1", "y\n(Run MP)")) +
+  xlab("Year") + ylab("Index value") +
+  guides(color = guide_legend(title = NULL)) +
+  theme( legend.position = c(0.2, 0.85),
+         axis.text.x = element_text(size = 7),
+         axis.text.y = element_blank(),
+         axis.ticks.y = element_blank() )
+ggsave(filename = file.path(fig_dir, 'Ig_calculation.png'), plot = p1, 
        width = 80, height = 70, units = "mm", dpi = 300)
 
 
