@@ -110,7 +110,7 @@ ggsave(filename = file.path(fig_dir, 'index_based.png'), plot = p1,
 # -------------------------------------------------------------------------
 # Derivation of I_G from set of indices:
 
-cpue_vals = c(0.99, 0.98, 0.95, 1, 0.97, 1.04, 1.03, 1.09, 1.05, NA) # Always NA at the end
+cpue_vals = c(1, 0.97, 0.99, 0.98, 0.95, 1, 0.97, 1.04, 1.03, 1.09, 1.05, NA) # Always NA at the end
 n_vals = length(cpue_vals) # n cpue vals to be simulated
 
 df1 = data.frame(cpue = cpue_vals)
@@ -124,26 +124,32 @@ df3$type = "Index_3"
 # Merge:
 cpue_df = rbind(df1, df2, df3)
 # Find CPUE combined I_G:
-Ig_df = cpue_df %>% filter(time %in% (n_vals-2):(n_vals-1))
+Ig_df_1 = cpue_df %>% filter(!is.na(cpue), time %in% (n_vals-1):(n_vals-3)) %>% 
+  group_by(time) %>% summarise(cpue = mean(cpue), .groups = "drop")
+Ig_df_2 = cpue_df %>% filter(!is.na(cpue), time %in% (n_vals-4):(n_vals-6)) %>% 
+  group_by(time) %>% summarise(cpue = mean(cpue), .groups = "drop")
 
 p1 = ggplot(data = data.frame(x = c(n_vals-2-0.25, n_vals-2-0.25, n_vals+0.25, n_vals+0.25, n_vals-2-0.25),
                               y = c(-10, 10, 10, -10, -10))) +
   geom_polygon(aes(x = x, y = y), fill = "gray50", alpha = 0.25) +
   geom_line(data = cpue_df, aes(x = time, y = cpue, color = type)) +
   annotate("text", x = n_vals-1, y = 0.92, label = "Current\nManagement\nPeriod (t)", size = 2.5) +
-  annotate("text", x = n_vals-1.5, y = 1.06, label = expression(I[G]), size = 3.5, color = "red") +
   scale_color_brewer(palette = "YlGnBu") +
-  geom_point(data = Ig_df, aes(x = time, y = cpue), color = 'red', size = 1.5) +
+  geom_line(data = Ig_df_1, aes(x = time, y = cpue), color = 'red') +
+  geom_point(data = Ig_df_1, aes(x = time, y = cpue), color = 'red', size = 1.7) +
+  geom_line(data = Ig_df_2, aes(x = time, y = cpue), color = 'red', linetype = "dashed") +
+  geom_point(data = Ig_df_2, aes(x = time, y = cpue), color = 'red', size = 1.7) +
   coord_cartesian(ylim = c(0.9, 1.1)) +
   theme_classic() +
-  scale_x_continuous(breaks = (n_vals-2):n_vals, labels = c("y-2", "y-1", "y\n(Run MP)")) +
+  scale_x_continuous(breaks = (n_vals-6):n_vals, labels = c("y-6", "y-5", "y-4", "y-3",
+                                                            "y-2", "y-1", "y\n(Run MP)")) +
   xlab("Year") + ylab("Index value") +
   guides(color = guide_legend(title = NULL)) +
   theme( legend.position = c(0.2, 0.85),
          axis.text.x = element_text(size = 7),
          axis.text.y = element_blank(),
          axis.ticks.y = element_blank() )
-ggsave(filename = file.path(fig_dir, 'Ig_calculation.png'), plot = p1, 
+ggsave(filename = file.path(fig_dir, 'Emp_calculation.png'), plot = p1, 
        width = 80, height = 70, units = "mm", dpi = 300)
 
 

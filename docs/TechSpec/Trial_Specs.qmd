@@ -230,25 +230,9 @@ The management advice is given every three years (*management period*) and the t
 
 ![Representation of the TAC calculation for the next management period.](../figures/mp_timeline.png){#fig-timeline}
 
-### Pseudo-constant catch {#sec-mp-pcc}
+### Empirical {#sec-mp-emp}
 
-The total allowable catch (TAC) for the next management period ($t+1$) is assumed constant, unless a reference value ($I_{G}$) derived from a group of indices of abundance in the last two years falls below a reference value $I_{ref}=0.91$ (value observed in 2010, when $SSB>SSB_{msy}$):
-
-$$TAC_{t+1} =
-\begin{cases}
-TAC_{max}, & \text{if }I_{G} \geq I_{ref} \\
-TAC_{max}(\frac{I_{G}}{I_{ref}}), & \text{if }I_{G} < I_{ref}
-\end{cases}$$
-
-where $TAC_{max}=42,000$ tonnes (@fig-pcc). $I_{G}$ was calculated as follows:
-
-$$I_G = exp(\frac{1}{n_i}\sum_{i}log(I^*_i))$$
-
-where $n_i$ is the number of selected indices of abundance and $I^*_i$ was calculated for every selected index of abundance $I_i$ using information from the last two years ($y-1$ and $y-2$):
-
-$$I^*_i = \frac{I_{i,y-1}+I_{i,y-2}}{2}$$
-
-For this case, the selected indices of abundance $I_i$ were (see @tbl-fleet for fleet description):
+The total allowable catch (TAC) for the next management period ($t+1$) is calculated from the TAC in the current management period $t$ and a factor $J_{rat}$ derived from a selected indices of abundance:
 
 -   $1\_BB$
 -   $6\_JPLL\_S$
@@ -257,26 +241,36 @@ For this case, the selected indices of abundance $I_i$ were (see @tbl-fleet for 
 -   $9\_USLL\_N$
 -   $10\_USLL\_S$
 
-In addition, the TAC variation between consecutive management periods $TAC_{t+1}$ and $TAC_{t}$ could not exceed 15% when $I_G < I_{ref}$.
+First, we calculated a *combined* index of abundance ($J_Y$) for every year $Y$, where $Y\in \{y-1,...,y-6\}$:
 
-![Derivation of the TAC for the next management period ($TAC_{t+1}$) in the pseudoconstant catch MP.](../figures/pccatch.png){#fig-pcc width="55%"}
+$$J_Y = \frac{\sum_{i=i}^{n_i}I_{i,Y}}{n_i}$${#eq-emp1}
 
-### Index-based
+where $n_i$ represents the number of selected indices, and $I_{i,Y}$ represents the value of index $i$ in year $Y$. 
 
-TAC for the next management period $t+1$ is calculated as a function of the current TAC ($TAC_{t}$):
+An alternative way of calculating $J_Y$ in @eq-emp1 was also explored, where each index $I_i$ was weighted by a factor $w_{i,Y}$:
 
-$$TAC_{t+1} =
-\begin{cases}
-TAC_{t}, & \text{if }(1-\alpha)I_{ref} \leq I_{G} \leq (1+\alpha)I_{ref} \\
-(1+\beta)TAC_{t}, & \text{if }I_{G} > (1+\alpha)I_{ref} \\
-(1-\beta)TAC_{t}, & \text{if }I_{G} < (1-\alpha)I_{ref}
-\end{cases}$$
+$$J_Y = \frac{\sum_{i=i}^{n_i}I_{i,Y}w_{i,Y}}{\sum_{i=i}^{n_i}w_{i,Y}}$${#eq-emp2}
 
-where we assumed $\alpha=0.15$ and $\beta=0.15$ (@fig-ibased). $I_{G}$ was calculated as specified in @sec-mp-pcc. For this case, $I_{ref}=1$ (value observed in 2012, when $SSB>SSB_{msy}$). 
+In @eq-emp2, $w_{i,Y}$ is derived from the standard deviation ($\sigma$) and temporal autocorrelation ($\rho$) of indices residuals:
 
-In addition, $TAC_{t} = TAC_{max}$ when $TAC_{t} > TAC_{max}$, assuming that $TAC_{max} = 50,000$ tonnes. Also, the TAC variation between consecutive management periods $TAC_{t+1}$ and $TAC_{t}$ could not exceed 15%.
+$$w_{i,Y}=\frac{1}{\sqrt{\sigma_i/(1-\rho_i)}}$$
 
-![Derivation of the TAC for the next management period ($TAC_{t+1}$) in the index-based MP.](../figures/index_based.png){#fig-ibased width="55%"}
+Once $J_Y$ is calculated, we then derive the ratio of change in $J$ between two consecutive periods in the previous six years (@fig-Jrat):
+
+$$J_{rat} = \frac{J_{y-1}+J_{y-2}+J_{y-3}}{J_{y-4}+J_{y-5}+J_{y-6}}$$
+
+![Example of the derivation of $J_Y$ from a set of indices. The red line represents $J_Y$ for the previous six years.](../figures/Emp_calculation.png){#fig-Jrat width="55%"}
+
+Finally, the TAC for the next management period is obtained:
+
+$$TAC_{t+1} = J_{rat} TAC_t $$
+
+In addition, we imposed two types of restriction on the TAC variation between consecutive management periods $TAC_{t+1}$ and $TAC_{t}$:
+
+- Maximum increase and decrease of 25%
+- Maximum increase and decrease of 10%
+
+Therefore, four empirical HCR were obtained.
 
 ### Model-based
 

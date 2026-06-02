@@ -35,5 +35,5 @@ The document can be found [here](https://iccat.github.io/nalb-mse-2/TechSpec/Tri
 
 This application presents the main MSE results by using the FLBEIA Shiny App.
 
-The application can be found [here](https://aztigps.shinyapps.io/shiny-flbeia/?dataset=ALB).
+The application can be found [here](https://aztigps.shinyapps.io/shiny-flbeia/?dataset=NALB).
 
