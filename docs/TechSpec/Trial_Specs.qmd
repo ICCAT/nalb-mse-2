@@ -148,11 +148,9 @@ Then, 100 models per weighting scenario were selected based on maximum gradient,
 
 The robustness scenarios explored the impacts of changes in $R_0$ and recruitment variability:
 
-- Changes in $R_0$: decrease in the $R_0$ parameter of the Beverton-Holt relationship by 20% in the simulation period from the estimated values in the Reference OMs.
+- Changes in $R_0$: decrease or increase in the $R_0$ parameter of the Beverton-Holt relationship by 20% in the projection period from the estimated values in the Reference OMs.
 
 - Changes in sigmaR: increase in the recruitment variability by 20% in the simulation period from the estimated values in the Reference OMs.
-
-Robustness scenario are currently under development.
 
 ### Validation
 
@@ -230,9 +228,25 @@ The management advice is given every three years (*management period*) and the t
 
 ![Representation of the TAC calculation for the next management period.](../figures/mp_timeline.png){#fig-timeline}
 
-### Empirical {#sec-mp-emp}
+### Pseudo-constant catch {#sec-mp-pcc}
 
-The total allowable catch (TAC) for the next management period ($t+1$) is calculated from the TAC in the current management period $t$ and a factor $J_{rat}$ derived from a selected indices of abundance:
+The total allowable catch (TAC) for the next management period ($t+1$) is assumed constant, unless a reference value ($I_{G}$) derived from a group of indices of abundance in the last two years falls below a reference value $I_{ref}=0.91$ (value observed in 2010, when $SSB>SSB_{msy}$):
+
+$$TAC_{t+1} =
+\begin{cases}
+TAC_{ct}, & \text{if }I_{G} \geq I_{ref} \\
+TAC_{ct}(\frac{I_{G}}{I_{ref}}), & \text{if }I_{G} < I_{ref}
+\end{cases}$$
+
+where $TAC_{ct}=42,000$ tonnes (@fig-pcc). $I_{G}$ was calculated as follows:
+
+$$I_G = exp(\frac{1}{n_i}\sum_{i}log(I^*_i))$$
+
+where $n_i$ is the number of selected indices of abundance and $I^*_i$ was calculated for every selected index of abundance $I_i$ using information from the last two years ($y-1$ and $y-2$):
+
+$$I^*_i = \frac{I_{i,y-1}+I_{i,y-2}}{2}$$
+
+For this case, the selected indices of abundance $I_i$ were (see @tbl-fleet for fleet description):
 
 -   $1\_BB$
 -   $6\_JPLL\_S$
@@ -241,17 +255,19 @@ The total allowable catch (TAC) for the next management period ($t+1$) is calcul
 -   $9\_USLL\_N$
 -   $10\_USLL\_S$
 
-First, we calculated a *combined* index of abundance ($J_Y$) for every year $Y$, where $Y\in \{y-1,...,y-6\}$:
+In addition, the TAC variation between consecutive management periods $TAC_{t+1}$ and $TAC_{t}$ could not exceed 15%.
 
-$$J_Y = \frac{\sum_{i=i}^{n_i}I_{i,Y}}{n_i}$${#eq-emp1}
+![Derivation of the TAC for the next management period ($TAC_{t+1}$) in the pseudoconstant catch MP.](../figures/pccatch.png){#fig-pcc width="55%"}
 
-where $n_i$ represents the number of selected indices, and $I_{i,Y}$ represents the value of index $i$ in year $Y$. 
+### Index-based {#sec-mp-emp}
 
-An alternative way of calculating $J_Y$ in @eq-emp1 was also explored, where each index $I_i$ was weighted by a factor $w_{i,Y}$:
+The total allowable catch (TAC) for the next management period ($t+1$) is calculated from the TAC in the current management period $t$ and a factor $J_{rat}$ derived from a selected indices (see @sec-mp-pcc). First, we calculated a *combined* index of abundance ($J_Y$) for every year $Y$, where $Y\in \{y-1,...,y-6\}$:
 
-$$J_Y = \frac{\sum_{i=i}^{n_i}I_{i,Y}w_{i,Y}}{\sum_{i=i}^{n_i}w_{i,Y}}$${#eq-emp2}
+<!-- $$J_Y = \frac{\sum_{i=i}^{n_i}I_{i,Y}}{n_i}$${#eq-emp1} -->
 
-In @eq-emp2, $w_{i,Y}$ is derived from the standard deviation ($\sigma$) and temporal autocorrelation ($\rho$) of indices residuals:
+$$J_Y = \frac{\sum_{i=1}^{n_i}I_{i,Y}w_{i,Y}}{\sum_{i=1}^{n_i}w_{i,Y}}$${#eq-emp}
+
+where $n_i$ represents the number of selected indices, $I_{i,Y}$ represents the value of index $i$ in year $Y$, and $w_{i,Y}$ is the weighting factor. $w_{i,Y}$ is derived from the standard deviation ($\sigma$) and temporal autocorrelation ($\rho$) of indices residuals:
 
 $$w_{i,Y}=\frac{1}{\sqrt{\sigma_i/(1-\rho_i)}}$$
 
@@ -267,10 +283,8 @@ $$TAC_{t+1} = J_{rat} TAC_t $$
 
 In addition, we imposed two types of restriction on the TAC variation between consecutive management periods $TAC_{t+1}$ and $TAC_{t}$:
 
-- Maximum increase and decrease of 25%
+- Maximum increase of 25% and decrease of 20%, or
 - Maximum increase and decrease of 10%
-
-Therefore, four empirical HCR were obtained.
 
 ### Model-based
 
@@ -287,7 +301,7 @@ TAC is derived from a harvest control rule based on stock status estimate (@fig-
 
 In addition, $B_{lim}=0.4\times B_{msy}$ and $F_{mim}=0.1\times F_{msy}$ for all cases. These MPs were divided into two groups, depending on the maximum allowed variation between $TAC_{t+1}$ and $TAC_{t}$: 
 
-- Maximum increase or decrease of 10%
+- Maximum increase or decrease of 10%, or
 - Maximum increase of 25% and decrease of 20%
 
 ## Performance Indicators

@@ -70,12 +70,12 @@ p1 = ggplot() +
   geom_segment(aes(x = 1, y = 1, xend = 10, yend = 1), linewidth = 1) +
   geom_segment(aes(x = 1, y = 1, xend = 1, yend = 0), linewidth = 0.5, color = "red", linetype = "dashed", alpha = 0.5) +
   geom_segment(aes(x = 1, y = 1, xend = 0, yend = 1), linewidth = 0.5, color = "red", linetype = "dashed", alpha = 0.5) +
-  annotate("text", x = 1.25, y = 0.5, label = expression("~f("*TAC[max]*")")) +
+  annotate("text", x = 1.25, y = 0.5, label = expression("~f("*TAC[ct]*")")) +
   geom_curve(
     aes(x = 1.25, y = 0.47, xend = 0.42, yend = 0.4),
     curvature = -0.3, arrow = arrow(length = unit(0.2, "cm")), linewidth = 0.5 ) +
   scale_x_continuous(breaks = c(0, 1), labels = c("0", expression(I[ref]))) +
-  scale_y_continuous(breaks = c(0, 1), labels = c("0", expression(TAC[max]))) +
+  scale_y_continuous(breaks = c(0, 1), labels = c("0", expression(TAC[ct]))) +
   coord_cartesian(xlim = c(0,1.5), ylim = c(0,1.2), expand = c(0,0)) +
   theme_classic() +
   ylab(expression(TAC["t+1"])) + xlab(expression(I[G]))
