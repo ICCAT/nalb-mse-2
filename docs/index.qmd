@@ -33,7 +33,7 @@ The document can be found [here](https://iccat.github.io/nalb-mse-2/TechSpec/Tri
 
 ## MSE Shiny App with Results
 
-This application presents the main MSE results by using the FLBEIA Shiny App.
+The FLBEIA Shiny App is used for presentation of the MSE results, and can be found online with the preliminary N-ALB MSE results [here](https://aztigps.shinyapps.io/shinyflbeia/?dataset=NALB).
 
-The application can be found [here](https://aztigps.shinyapps.io/shiny-flbeia/?dataset=NALB).
+For R users, this Shiny App can also be run locally. To do so, follow the instructions [here](https://github.com/Fundacion-AZTI/shinyFLBEIA) and download the `.flbeia` file with the preliminary N-ALB MSE results [here](data/NALB.flbeia).  
 

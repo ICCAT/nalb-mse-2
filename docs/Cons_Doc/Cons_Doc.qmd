@@ -1,5 +1,5 @@
 ---
-title: "Consolidated document for North Atlantic Albacore MSE"
+title: "Consolidated Document for North Atlantic Albacore Management Strategy Evaluation"
 authors: 
   - name: Agurtzane Urtizberea
     affiliations:
@@ -47,6 +47,7 @@ require(kableExtra)
 require(gt)
 require(cowplot)
 library(downloadthis)
+require(webshot2)
 # This will automatically update the BIB file:
 #keys = rbbt::bbt_detect_citations('Trial_Specs.qmd')
 #bbt_ignore = keys[grepl("fig-|tbl-|eq-|sec-", keys)]
@@ -59,7 +60,7 @@ Summary
 :::
 
 ::: {custom-style="Abstract"}
-In this document we compile the most important information of the working documents that describe the North Atlantic albacore MSE in a consolidated report in a way that contains all the information needed to: understand how the MSE framework was built; how it has been peer-reviewed and updated. This document is intended to be a reference document that can be updated in the future, if necessary, as the north Atlantic albacore MSE evolves. The “living” document will be stored in the ICCAT website for consultation. 
+In this document we compile the most important information of the working documents that describe the North Atlantic Albacore Management Strategy Evaluation (MSE) in a consolidated report in a way that contains all the information needed to: understand how the MSE framework was built; how it has been peer-reviewed and updated. This document is intended to be a reference document that can be updated in the future, if necessary, as the North Atlantic albacore MSE evolves. The “living” document can be found at <https://iccat.github.io/nalb-mse-2/>. 
 :::
 
 ::: {custom-style="Keywords"}
@@ -72,7 +73,7 @@ North Atlantic albacore tuna, management strategy evaluation, FLBEIA, SPiCT
 
 # Introduction
 
-The North Atlantic Albacore (NALB) fishery, under the management of the International Commission for the Conservation of Atlantic Tuna (ICCAT), is undergoing a management strategy evaluation (MSE) process.
+The North Atlantic Albacore (N-ALB) fishery, under the management of the International Commission for the Conservation of Atlantic Tuna (ICCAT), is undergoing a management strategy evaluation (MSE) process.
 
 ## Management strategy evaluation
 
@@ -82,69 +83,37 @@ There are three main components in an MSE process:
 
 -   **Operating models (OMs)**: a collection of mathematical/statistical models that describe alternative hypotheses of the historical fishery dynamics and specifications for simulating the collection of data and implementation of management measures in the future;
 -   **Candidate management procedures (CMPs)**: a set of proposed algorithms that generate management recommendations from fishery data and will be evaluated in the MSE;
--   **Performance metrics (PMs)**: statistics used to quantitatively evaluate the CMPs against specified management objectives.
+-   **Performance indicators (PIs)**: statistics used to quantitatively evaluate the CMPs against specified management objectives.
 
-The OMs, CMPs, and PMs are developed as a collaborative effort between scientists, decision-makers, and other stakeholders in the fishery.
+The OMs, CMPs, and PIs are developed as a collaborative effort between scientists, decision-makers, and other stakeholders in the fishery.
 
-```{mermaid}
-%%| label: fig-mse
-%%| fig-cap: Management strategy evaluation (MSE) framework.
-flowchart LR
-    subgraph B1["Operating model"]
-        direction TB
-        i1["Biological and <br> fishery model"]
-        f1["Data generation"]
-    end
-
-    subgraph B2["Management procedure"]
-        direction BT
-        i2["Estimation method"] 
-        f2["Harvest control rule"]
-    end
-    f1 --> i2
-    f2 --Implementation--> i1
-    i1 --> f1
-    i2 --> f2
-    B1 --> i3["Performance metrics"]
-    style B1 fill:#d4f5ba
-    style B2 fill:#b9c8fc
-    style i3 fill:#fcf7b9
-    style i1 fill:#ffffff
-    style f1 fill:#ffffff
-    style i2 fill:#ffffff
-    style f2 fill:#ffffff
-    
-    %% Set all nodes to black text
-    linkStyle default color:#000000
-    classDef blackText color:#000000;
-    class i1,f1,i2,f2,i3,B1,B2 blackText;
-```
+![Management strategy evaluation (MSE) framework.](../figures/mse.png){#fig-mse}
 
 ## About this document
 
-This document describes the specifications for the OMs, CMPs, and PMs that have been proposed and developed for the NALB fishery. It is a living document and will be continued to be updated so that it reflects the current state of the NALB MSE process. Members of the Albacore Species Group (ALBSG) are encouraged to provide feedback, comments, or edits to any part of this document.
+This document describes the specifications for the OMs, CMPs, and PIs that have been proposed and developed for the N-ALB fishery. It is a living document and will be continued to be updated so that it reflects the current state of the N-ALB MSE process. Members of the Albacore Species Group (ALBSG) are encouraged to provide feedback, comments, or edits to any part of this document.
 
 The document is written using the [Quarto](https://quarto.org/) format and can edited in any text editor. The source document is available on the [MSE GitHub repository](https://github.com/ICCAT/nalb-mse-2). ALBSG members can make edits to the document either directly in the online repository or by cloning the repository and submitting pull requests with their edits. Alternatively, they can email questions or comments to [the MSE developers](mailto:aurtizberea@azti.es). The former approach has the advantage that all comments, questions, and edits are immediately visible to all members of the ALBSG. The [Discussions feature](https://docs.github.com/en/discussions/quickstart#creating-a-new-discussion) on the Github repository can also be used to post questions, comments, or points for discussion related to any aspect of this document or the MSE process in general.
 
-This document is available at the NALB MSE homepage.
+This document is available at the [N-ALB MSE homepage](https://iccat.github.io/nalb-mse-2/).
 
 ## MSE framework
 
-The R software has been used to developed the MSE code for the NABL fishery. All code is open-source and can be found on the [MSE GitHub repository](https://github.com/ICCAT/nalb-mse-2). 
+The R software has been used to developed the MSE code for the N-ALB fishery. All code is open-source and can be found on the [MSE GitHub repository](https://github.com/ICCAT/nalb-mse-2). 
 
-The code developed for the NALB MSE uses the [FLBEIA](https://github.com/flr/FLBEIA) framework. FLBEIA [@garciaFLBEIASimulationModel2017] is an R package that has been developed for conducting bio-economic evaluation of fisheries management strategies. The software allows the bio-economic evaluation of a wide range of management strategies in a great variety of case studies such as multi-stock, multi-fleet, stochastic and seasonal configurations. FLBEIA is built using FLR libraries. [FLR](https://flr-project.org/) is a collaborative project oriented to develop quantitative fisheries management tools.
+The code developed for the N-ALB MSE uses the [FLBEIA](https://github.com/flr/FLBEIA) framework. FLBEIA [@garciaFLBEIASimulationModel2017] is an R package that has been developed for conducting bio-economic evaluation of fisheries management strategies. The software allows the bio-economic evaluation of a wide range of management strategies in a great variety of case studies such as multi-stock, multi-fleet, stochastic and seasonal configurations. FLBEIA is built using FLR libraries. [FLR](https://flr-project.org/) is a collaborative project oriented to develop quantitative fisheries management tools.
 
 # Stock assessment
 
-Previously, the NALB OMs were based on the 2013 stock assessment [@merinoPreliminaryStockAssessment2014; @merinoUpdatedConsolidatedReport2020] using the MULTIFAN-CL platform [@fournierMULTIFANCLLengthbasedAgestructured1998].
+Previously, the N-ALB OMs were based on the 2013 stock assessment [@merinoPreliminaryStockAssessment2014; @merinoUpdatedConsolidatedReport2020] using the MULTIFAN-CL platform [@fournierMULTIFANCLLengthbasedAgestructured1998].
 
-A new stock assessment was conducted in 2023 [@iccatReport2023ICCAT2023] using the Stock Synthesis (SS3) platform [@methotStockSynthesisBiological2013]. The NALB OMs have been updated based on this new assessment.
+A new stock assessment was conducted in 2023 [@iccatReport2023ICCAT2023] using the Stock Synthesis (SS3) platform [@methotStockSynthesisBiological2013]. The N-ALB OMs have been updated based on this new assessment.
 
-The data used in the 2023 NALB assessment as well as the structure and assumptions of the assessment model are summarized in the sections below.
+The data used in the 2023 N-ALB assessment as well as the structure and assumptions of the assessment model are summarized in the sections below.
 
 ```{r}
 #| label: tbl-fleet
-#| tbl-cap: Fishing fleets included the 2023 NALB stock assessment. The last column indicates if the fleet had an associated index of abundance (catch-per-unit-effort, CPUE).
+#| tbl-cap: Fishing fleets included the 2023 N-ALB stock assessment. The last column indicates if the fleet had an associated index of abundance (catch-per-unit-effort, CPUE).
 my_tab = readRDS('../tables/FleetInfo.rds')
 my_tab |> gt() |>
   cols_label(Fleet = "Fleet code",
@@ -162,7 +131,7 @@ The period covered was from 1930 to 2021. The assessment mainly used landings da
 
 Length composition data from 12 fleets were included in the model, mostly from LL and BB fleets and for the period after 1970 (@fig-data). The effective sample size (ESS) for the length composition data was established by adjusting ESS until unity was reached between modeled ESS and the Francis suggested sample size [@francisDataWeightingStatistical2011]. Conditional age-at-length (CAAL) data was also included for the BB (France and Spain) fleet.
 
-![Indices of abundance (CPUE) by fleet included in the NALB assessment model.](../figures/cpue_obs.png){#fig-cpue}
+![Indices of abundance (CPUE) by fleet included in the N-ALB assessment model.](../figures/cpue_obs.png){#fig-cpue}
 
 ## Model structure
 
@@ -203,13 +172,11 @@ Then, 100 models per weighting scenario were selected based on maximum gradient,
 
 ## Robustness OMs
 
-The robustness scenarios explored the impacts of changes in $R_0$, recruitment variability, and maximum annual catch:
+The robustness scenarios explored the impacts of changes in $R_0$ and recruitment variability:
 
-- Changes in $R_0$: decrease in the $R_0$ parameter of the Beverton-Holt relationship by 20% in the simulation period from the estimated values in the Reference OMs.
+- Changes in $R_0$: decrease or increase in the $R_0$ parameter of the Beverton-Holt relationship by 20% in the projection period from the estimated values in the Reference OMs.
 
 - Changes in sigmaR: increase in the recruitment variability by 20% in the simulation period from the estimated values in the Reference OMs.
-
-- Maximum catch ($C_{max}$): maximum annual catch of 100,000 tonnes.
 
 ## Validation
 
@@ -223,16 +190,16 @@ Individual diagnostic reports with objective function values and plots of model 
 
 ## Conditioning
 
-The Reference OMs were conditioned in FLBEIA with the same biological configuration and fleet structure of the SS3 models (@tbl-fleet). Two main periods are modelled in the MSE framework: historical and projection periods (@fig-time), with important differences in the data generation and observation error model (OEM).
+The Reference OMs were conditioned in FLBEIA with the same biological configuration and fleet structure of the SS3 models (@tbl-fleet). Two main periods are modelled in the MSE framework: historical and simulation periods (@fig-time), with important differences in the data generation and observation error model (OEM).
 
 ```{mermaid}
 %%| label: fig-time
 %%| fig-cap: Periods in the MSE and main differences between them.
 timeline
-    section 1930 - 2021
+    section 1930 - 2026
         Historical period : - Catches from observations <br> - CPUE from OEM
-    section 2022 - 2050
-        Simulation period : - Catches from HCR <br> - CPUE from OEM <br> - Evaluate MPs
+    section 2027 - 2050
+        Simulation period : - Catches from HCR <br> - CPUE from OEM <br> - Evaluate CMPs through PIs
 ```
 
 ### Observation error model
@@ -260,143 +227,143 @@ mytab |> gt() |>
 include_graphics(path = 'tables_img/my_tmp_tab2.png')
 ```
 
-# Management Procedure
+# Candidate Management Procedures
 
-Simulated data was included in a stochastic surplus production model in continuous time (SPiCT). SPiCT is a full state-space model, where biomass and fishing dynamics are modelled as states, which are observed indirectly through biomass indices and commercial catches sampled with error [@pedersenStochasticSurplusProduction2017]. SPiCT calculates maximum sustainable yield (MSY) reference points and is able to make short-term projections. SPiCT is the estimation method in the MSE.
+The management advice is given every three years (*management period*) and the total allowable catch (TAC) is derived from the candidate MP. The candidate MP was run in the last year of each management period, including information up to the previous year. The TAC derived from the MP was set for the next management period (@fig-timeline).
 
-![Example of harvest control rule (HCR).](../figures/hcr_example.png){#fig-hcr width="55%"}
+![Representation of the TAC calculation for the next management period.](../figures/mp_timeline.png){#fig-timeline}
 
-The management advice is given every three years (*management period*) and the total allowable catch (TAC) is derived from a harvest control rule (HCR, @fig-hcr). 
+## Pseudo-constant catch {#sec-mp-pcc}
 
-If the current biomass ($B_{cur}$) is estimated to be below the threshold level ($B_{thr}$) and higher than $B_{lim}$, then fishing mortality will be reduced linearly for the next multiannual management period ($F_{next}$) on the following basis:
+The total allowable catch (TAC) for the next management period ($t+1$) is assumed constant, unless a reference value ($I_{G}$) derived from a group of indices of abundance in the last two years falls below a reference value $I_{ref}=0.91$ (value observed in 2010, when $SSB>SSB_{msy}$):
 
-$$F_{next} = (a+b\frac{B_{cur}}{B_{msy}})F_{msy}$$
+$$TAC_{t+1} =
+\begin{cases}
+TAC_{ct}, & \text{if }I_{G} \geq I_{ref} \\
+TAC_{ct}(\frac{I_{G}}{I_{ref}}), & \text{if }I_{G} < I_{ref}
+\end{cases}$$
 
-where:
+where $TAC_{ct}=42,000$ tonnes (@fig-pcc). $I_{G}$ was calculated as follows:
 
-$$a = (\frac{F_{tgt}}{F_{msy}}) - (\frac{\frac{F_{tgt}}{F_{msy}} - \frac{F_{min}}{F_{msy}}}{\frac{B_{thr}}{B_{msy}} - \frac{B_{lim}}{B_{msy}}})\frac{B_{thr}}{B_{msy}}$$
+$$I_G = exp(\frac{1}{n_i}\sum_{i}log(I^*_i))$$
 
-and
+where $n_i$ is the number of selected indices of abundance and $I^*_i$ was calculated for every selected index of abundance $I_i$ using information from the last two years ($y-1$ and $y-2$):
 
-$$b = \frac{\frac{F_{tgt}}{F_{msy}} - \frac{F_{min}}{F_{msy}}}{\frac{B_{thr}}{B_{msy}} - \frac{B_{lim}}{B_{msy}}}$$
+$$I^*_i = \frac{I_{i,y-1}+I_{i,y-2}}{2}$$
 
-We evaluated a total of 15 HCRs produced by the combinations of $F_{tgt}$ and $B_{thr}$ shown in @fig-hcr-combs. $B_{lim}=0.4\times B_{msy}$ and $F_{mim}=0.1\times F_{msy}$ for all cases. In addition, we imposed the following restrictions:
+For this case, the selected indices of abundance $I_i$ were (see @tbl-fleet for fleet description):
 
--   The maximum TAC was 50,000 tonnes.
--   Maximum increase in catch from previous management period: 25%
--   Maximum decrease in catch from previous management period: 20%
+-   $1\_BB$
+-   $6\_JPLL\_S$
+-   $7\_TAILL\_N$
+-   $8\_TAILL\_S$
+-   $9\_USLL\_N$
+-   $10\_USLL\_S$
 
-![HCR evaluated in the MSE. These HCR come from combinations of $F_{tgt}$ (rows) and $B_{thr}$ (columns).](../figures/hcr_combs.png){#fig-hcr-combs width="75%"}
+In addition, the TAC variation between consecutive management periods $TAC_{t+1}$ and $TAC_{t}$ could not exceed 15%.
 
-# Performance Metrics
+![Derivation of the TAC for the next management period ($TAC_{t+1}$) in the pseudoconstant catch MP.](../figures/pccatch.png){#fig-pcc width="55%"}
 
-25 PMs have been developed for the NALB MSE (@tbl-pm) and are calculated in the simulation period. These PMs are grouped into four types: 
+## Index-based {#sec-mp-emp}
 
-- **Status**: metrics related to stock status 
+The total allowable catch (TAC) for the next management period ($t+1$) is calculated from the TAC in the current management period $t$ and a factor $J_{rat}$ derived from a selected indices (see @sec-mp-pcc). First, we calculated a *combined* index of abundance ($J_Y$) for every year $Y$, where $Y\in \{y-1,...,y-6\}$:
 
-- **Safety**: metrics related to the probability of the stock not falling below the biological reference points
+<!-- $$J_Y = \frac{\sum_{i=i}^{n_i}I_{i,Y}}{n_i}$${#eq-emp1} -->
 
-- **Yield**: metrics related to the catch in the projection years
+$$J_Y = \frac{\sum_{i=1}^{n_i}I_{i,Y}w_{i,Y}}{\sum_{i=1}^{n_i}w_{i,Y}}$${#eq-emp}
 
-- **Stability**: metrics related to the variation in the catches or TAC between management cycles
+where $n_i$ represents the number of selected indices, $I_{i,Y}$ represents the value of index $i$ in year $Y$, and $w_{i,Y}$ is the weighting factor. $w_{i,Y}$ is derived from the standard deviation ($\sigma$) and temporal autocorrelation ($\rho$) of indices residuals:
 
-Each PM was calculated for every Reference OM (i.e., 400 PMs). Examples of each PM is given below.
+$$w_{i,Y}=\frac{1}{\sqrt{\sigma_i/(1-\rho_i)}}$$
+
+Once $J_Y$ is calculated, we then derive the ratio of change in $J$ between two consecutive periods in the previous six years (@fig-Jrat):
+
+$$J_{rat} = \frac{J_{y-1}+J_{y-2}+J_{y-3}}{J_{y-4}+J_{y-5}+J_{y-6}}$$
+
+![Example of the derivation of $J_Y$ from a set of indices. The red line represents $J_Y$ for the previous six years.](../figures/Emp_calculation.png){#fig-Jrat width="55%"}
+
+Finally, the TAC for the next management period is obtained:
+
+$$TAC_{t+1} = J_{rat} TAC_t $$
+
+We imposed two types of restriction on the TAC variation between consecutive management periods $TAC_{t+1}$ and $TAC_{t}$:
+
+- Maximum increase of 25% and decrease of 20%, or
+- Maximum increase and decrease of 10%
+
+In addition, $TAC_{t}$ was restricted to not exceeding 50,000 tonnes.
+
+## Model-based
+
+Simulated data was included in a stochastic surplus production model in continuous time (SPiCT). SPiCT is a full state-space model, where biomass and fishing dynamics are modelled as states, which are observed indirectly through biomass indices and commercial catches sampled with error [@pedersenStochasticSurplusProduction2017]. SPiCT is able to calculate maximum sustainable yield (MSY) reference points. The data included in SPiCT was total catch and a set of indices of abundance listed in @sec-mp-pcc. SPiCT assumed that the stock started at unfished levels. A prior on the intrinsic growth rate was specified and obtained from [FishBase](https://www.fishbase.org/). Likewise, a prior on carrying capacity was set using information from the virgin biomass estimates from SS3.
+
+![Example of HCR in model-based MPs.](../figures/hcr_example.png){#fig-hcr width="50%"}
+
+TAC is derived from a harvest control rule based on stock status estimate (@fig-hcr). In the HCR, $F_{tgt}$ and $B_{thr}$ need to be defined, and the following options were tested (@fig-combs):
+
+- $F_{tgt}=0.8F_{msy}$ and $B_{thr}=B_{msy}$
+- $F_{tgt}=F_{msy}$ and $B_{thr}=B_{msy}$
+
+![Evaluated HCRs in model-based MPs.](../figures/hcr_combs_2.png){#fig-combs width="55%"}
+
+It was assumed that $B_{lim}=0.4\times B_{msy}$ and $F_{mim}=0.1\times F_{msy}$ for all cases. These MPs were divided into two groups, depending on the maximum allowed variation between $TAC_{t+1}$ and $TAC_{t}$: 
+
+- Maximum increase or decrease of 10%, or
+- Maximum increase of 25% and decrease of 20%
+
+In addition, $TAC_{t}$ was restricted to not exceeding 50,000 tonnes.
+
+# Performance Indicators
+
+15 PIs have been developed for the N-ALB MSE (@tbl-pm) and are calculated in the simulation period. These PIs are grouped into four types: 
+
+- **Status**: indicators related to stock status 
+
+- **Safety**: indicators related to the probability of the stock not falling below the biological reference points
+
+- **Yield**: indicators related to the catch in the projection years
+
+- **Stability**: indicators related to the variation in the catches or TAC between management cycles
+
+Each PI was calculated for every Reference OM (i.e., 400 PIs). Examples of each PI is given below.
 
 | Type | Metric | Symbol | Description |
 |-----------------|-------------------|-----------------|-------------------|
 | Status | Minimum spawner biomass relative to $B_{msy}$ | $minB$ | $min(B_y/B_{msy})$ |
 | Status | Mean spawner biomass relative to $B_{msy}$ | $meanB$ | $(\prod_y B_y/B_{msy})^{1/n_y}$ |
 | Status | Mean fishing mortality relative to $F_{msy}$ | $meanF$ | $(\prod_y F_y/F_{msy})^{1/n_y}$ |
-| Status | Probability of being in the Kobe green quadrant | $pGreen$ | Proportion of years in green quadrant (see @fig-hcr) |
-| Status | Probability of being in the Kobe red quadrant | $pRed$ | Proportion of years in red quadrant (see @fig-hcr) |
-| Safety | Probability of $B>B_{lim}$ | $pBlim$ | Proportion of years that $B>B_{lim}$ |
-| Safety | Probability of $B_{lim}<B<B_{msy}$ | $pBmsy$ | Proportion of years that $B_{lim}<B<B_{msy}$ |
-| Yield | Mean catch (short term) | $Csht$ | Mean catch from 1 to 3 years |
+| Status | Probability of being in the Kobe green quadrant | $PGK$ | Proportion of years in green quadrant (see @fig-hcr) |
+| Status | Probability of being in the Kobe red quadrant | $PRK$ | Proportion of years in red quadrant (see @fig-hcr) |
+| Safety | Probability of $B>B_{lim}$ | $PBlim$ | Proportion of years that $B>B_{lim}$ |
+| Safety | Probability of $B_{lim}<B<B_{msy}$ | $PBmsy$ | Proportion of years that $B_{lim}<B<B_{msy}$ |
+| Yield | Mean catch (short term) | $Cstr$ | Mean catch from 1 to 3 years |
 | Yield | Mean catch (medium term) | $Cmed$ | Mean catch from 5 to 10 years |
 | Yield | Mean catch (long term) | $Clon$ | Mean catch from 15 to 25 years |
-| Stability | Mean absolute proportional change in catch | $Cc$ | Mean of $\mid\frac{C_y - C_{y-1}}{C_{y-1}}\mid$ |
+| Stability | Mean absolute proportional change (%) in catch | $Cc$ | Mean of $\mid\frac{C_y - C_{y-1}}{C_{y-1}}\mid$ |
 | Stability | Standard deviation in catch | $Csd$ | Catch standard deviation |
-| Stability | Probability of shutdown | $pShw$ | Proportion of years that TAC=0 |
-| Stability | Probability of TAC change over a certain level | $pTX$ | Proportion of management cycles when the ratio of change $\frac{TAC_y - TAC_{y-1}}{TAC_{y-1}} > 10\%$ |
-| Stability | Maximum amount of TAC change between management periods | $maxTc$ | Maximum ratio of TAC change |
+| Stability | Probability of shutdown | $PShw$ | Proportion of management periods that TAC=0 |
+| Stability | Probability of TAC change above 10% | $PTcx$ | Proportion of management cycles when the ratio of change $\frac{TAC_{t+1} - TAC_{t}}{TAC_{t}} > 10\%$ |
+| Stability | Maximum amount of TAC change between management periods | $Tcmax$ | Maximum ratio of TAC change |
 
-: Performance metrics and description. These metrics were calculated from the simulation period. {#tbl-pm}
+: Performance indicators and description. These indicators were calculated from the simulation period. {#tbl-pm}
 
 ## Examples
 
 ### Status
 
-![Status performance metrics. The blue dots or lines indicate the meaning of the metric. Find more details in @tbl-pm.](../figures/status_ex.png){#fig-pm-status}
+![Status performance indicators. The blue dots or lines indicate the meaning of the metric. Find more details in @tbl-pm.](../figures/status_ex.png){#fig-pm-status}
 
 ### Safety
 
-![Safety performance metrics. The blue dots indicate the meaning of the metric. Find more details in @tbl-pm.](../figures/safety_ex.png){#fig-pm-safety}
+![Safety performance indicators. The blue dots indicate the meaning of the metric. Find more details in @tbl-pm.](../figures/safety_ex.png){#fig-pm-safety}
 
 ### Yield
 
-![Yield performance metrics. The blue lines indicate the meaning of the metric. Find more details in @tbl-pm.](../figures/yield_ex.png){#fig-pm-yield}
+![Yield performance indicators. The blue lines indicate the meaning of the metric. Find more details in @tbl-pm.](../figures/yield_ex.png){#fig-pm-yield}
 
 ### Stability
 
-![Stability performance metrics. The blue lines, arrows, or dots indicate the meaning of the metric. Find more details in @tbl-pm.](../figures/stability_ex.png){#fig-pm-stability}
-
-# Results
-
-## Performance metrics
-
-```{r}
-#| label: tbl-pm-summ
-#| tbl-cap: Performance metrics results. Numbers indicate the median over the 400 PMs calculated per HCR and OM. The color scale is independent for every column.
-mytab = readRDS('../tables/PM_summary.rds')
-mytab |> ungroup() |> gt() |> 
-  tab_spanner(label = md("**Status**"), 
-              columns = c('minB', 'meanB', 'meanF', 'pGreen', 'pRed')) |>
-  tab_spanner(label = md("**Safety**"), 
-              columns = c('pBlim', 'pBmsy')) |>
-  tab_spanner(label = md("**Yield**"), 
-              columns = c('Csht', 'Cmed', 'Clon')) |>
-  tab_spanner(label = md("**Stability**"), 
-              columns = c('Cc', 'Csd', 'pShw', 'pTX', 'maxTc')) |>
-  fmt_number(decimals = 2) |>
-  fmt_number(columns = c("Clon", "Cmed", "Csht", "Csd"), decimals = 0) |>
-  fmt_percent(
-     columns = c("pGreen", "pRed", "pBlim", "pBmsy", "Cc", "pShw", "pTX", "maxTc"),
-     decimals = 0
-  ) |> 
-  cols_label(Ftgt = md("**F<sub>tgt</sub>**"),
-             Btgt = md("**B<sub>thr</sub>**")) |>
-  data_color(method = "numeric", palette = c("#ffffff", "#000000")) |> gtsave('tables_img/my_tmp_tab3.png')
-
-include_graphics(path = 'tables_img/my_tmp_tab3.png')
-```
-
-```{r}
-#| label: tbl-pm-summ-robust
-#| tbl-cap: Performance metrics results for robustness scenarios. Numbers indicate the median over the 400 PMs calculated per HCR and OM. The color scale is independent for every column.
-mytab = readRDS('../tables/PM_summary_robust.rds')
-mytab |> ungroup() |> gt() |> 
-  tab_spanner(label = md("**Status**"), 
-              columns = c('minB', 'meanB', 'meanF', 'pGreen', 'pRed')) |>
-  tab_spanner(label = md("**Safety**"), 
-              columns = c('pBlim', 'pBmsy')) |>
-  tab_spanner(label = md("**Yield**"), 
-              columns = c('Csht', 'Cmed', 'Clon')) |>
-  tab_spanner(label = md("**Stability**"), 
-              columns = c('Cc', 'Csd', 'pShw', 'pTX', 'maxTc')) |>
-  fmt_number(decimals = 2) |>
-  fmt_number(columns = c("Clon", "Cmed", "Csht", "Csd"), decimals = 0) |>
-  fmt_percent(
-     columns = c("pGreen", "pRed", "pBlim", "pBmsy", "Cc", "pShw", "pTX", "maxTc"),
-     decimals = 0
-  ) |> 
-  cols_label(Scen = md("**Scen**"),
-             Ftgt = md("**F<sub>tgt</sub>**"),
-             Btgt = md("**B<sub>thr</sub>**")) |>
-  data_color(method = "numeric", palette = c("#ffffff", "#000000")) %>% gtsave('tables_img/my_tmp_tab4.png')
-include_graphics(path = 'tables_img/my_tmp_tab4.png')
-```
-
-![Performance metrics for main scenarios.](../figures/pm_radar.png){#fig-pm-radar}
+![Stability performance indicators. The blue lines, arrows, or dots indicate the meaning of the metric. Find more details in @tbl-pm.](../figures/stability_ex.png){#fig-pm-stability}
 
 # Acknowledgments
 

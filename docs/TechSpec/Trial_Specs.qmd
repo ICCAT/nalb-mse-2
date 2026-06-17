@@ -62,7 +62,7 @@ There are three main components in an MSE process:
 
 The OMs, CMPs, and PIs are developed as a collaborative effort between scientists, decision-makers, and other stakeholders in the fishery.
 
-![Management strategy evaluation (MSE) framework.](../figures/mse.png){#fig-mse}
+![Management strategy evaluation (MSE) framework.](../figures/mse.png){#fig-mse width="75%"}
 
 ### About this document
 
@@ -265,11 +265,11 @@ The total allowable catch (TAC) for the next management period ($t+1$) is calcul
 
 <!-- $$J_Y = \frac{\sum_{i=i}^{n_i}I_{i,Y}}{n_i}$${#eq-emp1} -->
 
-$$J_Y = \frac{\sum_{i=1}^{n_i}I_{i,Y}w_{i,Y}}{\sum_{i=1}^{n_i}w_{i,Y}}$${#eq-emp}
+$$J_Y = \frac{\sum_{i=1}^{n_i}I_{i,Y}w_{i}}{\sum_{i=1}^{n_i}w_{i}}$${#eq-emp}
 
-where $n_i$ represents the number of selected indices, $I_{i,Y}$ represents the value of index $i$ in year $Y$, and $w_{i,Y}$ is the weighting factor. $w_{i,Y}$ is derived from the standard deviation ($\sigma$) and temporal autocorrelation ($\rho$) of indices residuals:
+where $n_i$ represents the number of selected indices, $I_{i,Y}$ represents the value of index $i$ in year $Y$, and $w_{i}$ is the weighting factor. $w_{i}$ is derived from the standard deviation ($\sigma$) and temporal autocorrelation ($\rho$) of indices residuals:
 
-$$w_{i,Y}=\frac{1}{\sqrt{\sigma_i/(1-\rho_i)}}$$
+$$w_{i}=\frac{1}{\sqrt{\sigma_i/(1-\rho_i)}}$$
 
 Once $J_Y$ is calculated, we then derive the ratio of change in $J$ between two consecutive periods in the previous six years (@fig-Jrat):
 
@@ -281,14 +281,18 @@ Finally, the TAC for the next management period is obtained:
 
 $$TAC_{t+1} = J_{rat} TAC_t $$
 
-In addition, we imposed two types of restriction on the TAC variation between consecutive management periods $TAC_{t+1}$ and $TAC_{t}$:
+We imposed two types of restriction on the TAC variation between consecutive management periods $TAC_{t+1}$ and $TAC_{t}$:
 
 - Maximum increase of 25% and decrease of 20%, or
 - Maximum increase and decrease of 10%
 
+In addition, $TAC_{t}$ was restricted to not exceeding 50,000 tonnes.
+
 ### Model-based
 
-Simulated data was included in a stochastic surplus production model in continuous time (SPiCT). SPiCT is a full state-space model, where biomass and fishing dynamics are modelled as states, which are observed indirectly through biomass indices and commercial catches sampled with error [@pedersenStochasticSurplusProduction2017]. SPiCT calculates maximum sustainable yield (MSY) reference points and is able to make short-term projections. SPiCT is the estimation method in the MSE.
+Simulated data was included in a stochastic surplus production model in continuous time (SPiCT). SPiCT is a full state-space model, where biomass and fishing dynamics are modelled as states, which are observed indirectly through biomass indices and commercial catches sampled with error [@pedersenStochasticSurplusProduction2017]. SPiCT is able to calculate maximum sustainable yield (MSY) reference points. 
+
+The data included in SPiCT was composed of aggregated catch and the indices of abundance included in the stock assessment model (@fig-cpue). SPiCT assumed that the stock started at unfished levels. A prior on the intrinsic growth rate was specified and obtained from [FishBase](https://www.fishbase.org/). Likewise, a prior on carrying capacity was set using information from the virgin biomass estimates from SS3.
 
 ![Example of HCR in model-based MPs.](../figures/hcr_example.png){#fig-hcr width="50%"}
 
@@ -299,40 +303,41 @@ TAC is derived from a harvest control rule based on stock status estimate (@fig-
 
 ![Evaluated HCRs in model-based MPs.](../figures/hcr_combs_2.png){#fig-combs width="55%"}
 
-In addition, $B_{lim}=0.4\times B_{msy}$ and $F_{mim}=0.1\times F_{msy}$ for all cases. These MPs were divided into two groups, depending on the maximum allowed variation between $TAC_{t+1}$ and $TAC_{t}$: 
+It was assumed that $B_{lim}=0.4\times B_{msy}$ and $F_{mim}=0.1\times F_{msy}$ for all cases. These MPs were divided into two groups, depending on the maximum allowed variation between $TAC_{t+1}$ and $TAC_{t}$: 
 
 - Maximum increase or decrease of 10%, or
 - Maximum increase of 25% and decrease of 20%
 
+In addition, $TAC_{t}$ was restricted to not exceeding 50,000 tonnes.
+
 ## Performance Indicators
 
-15 PIs have been developed for the N-ALB MSE (@tbl-pm) and are calculated in the simulation period. These PIs are grouped into four types: 
+14 PIs have been developed for the N-ALB MSE (@tbl-pm) and are calculated in the simulation period. These PIs are grouped into four types: 
 
 - **Status**: indicators related to stock status 
 
 - **Safety**: indicators related to the probability of the stock not falling below the biological reference points
 
-- **Yield**: indicators related to the catch in the projection years
+- **Yield**: indicators related to the TAC in the simulation years
 
-- **Stability**: indicators related to the variation in the catches or TAC between management cycles
+- **Stability**: indicators related to the variation in TAC between management cycles
 
 Each PI was calculated for every Reference OM (i.e., 400 PIs). Examples of each PI is given below.
 
 | Type | Metric | Symbol | Description |
 |-----------------|-------------------|-----------------|-------------------|
 | Status | Minimum spawner biomass relative to $B_{msy}$ | $minB$ | $min(B_y/B_{msy})$ |
-| Status | Mean spawner biomass relative to $B_{msy}$ | $meanB$ | $(\prod_y B_y/B_{msy})^{1/n_y}$ |
-| Status | Mean fishing mortality relative to $F_{msy}$ | $meanF$ | $(\prod_y F_y/F_{msy})^{1/n_y}$ |
+| Status | Geometric mean spawner biomass relative to $B_{msy}$ | $meanB$ | $(\prod_y B_y/B_{msy})^{1/n_y}$ |
+| Status | Geometric mean fishing mortality relative to $F_{msy}$ | $meanF$ | $(\prod_y F_y/F_{msy})^{1/n_y}$ |
 | Status | Probability of being in the Kobe green quadrant | $PGK$ | Proportion of years in green quadrant (see @fig-hcr) |
 | Status | Probability of being in the Kobe red quadrant | $PRK$ | Proportion of years in red quadrant (see @fig-hcr) |
 | Safety | Probability of $B>B_{lim}$ | $PBlim$ | Proportion of years that $B>B_{lim}$ |
 | Safety | Probability of $B_{lim}<B<B_{msy}$ | $PBmsy$ | Proportion of years that $B_{lim}<B<B_{msy}$ |
-| Yield | Mean catch (short term) | $Cstr$ | Mean catch from 1 to 3 years |
-| Yield | Mean catch (medium term) | $Cmed$ | Mean catch from 5 to 10 years |
-| Yield | Mean catch (long term) | $Clon$ | Mean catch from 15 to 25 years |
-| Stability | Mean absolute proportional change (%) in catch | $Cc$ | Mean of $\mid\frac{C_y - C_{y-1}}{C_{y-1}}\mid$ |
-| Stability | Standard deviation in catch | $Csd$ | Catch standard deviation |
-| Stability | Probability of shutdown | $PShw$ | Proportion of management periods that TAC=0 |
+| Yield | Mean TAC (short term) | $Tstr$ | Mean TAC from 1 to 3 years |
+| Yield | Mean TAC (medium term) | $Tmed$ | Mean TAC from 5 to 10 years |
+| Yield | Mean TAC (long term) | $Tlon$ | Mean TAC from 15 to 25 years |
+| Stability | Standard deviation in TAC | $Tsd$ | TAC standard deviation |
+| Stability | Mean absolute proportional change (%) in TAC | $Tc$ | Mean of $\mid\frac{TAC_t - TAC_{t-1}}{TAC_{t-1}}\mid \times 100\%$ |
 | Stability | Probability of TAC change above 10% | $PTcx$ | Proportion of management cycles when the ratio of change $\frac{TAC_{t+1} - TAC_{t}}{TAC_{t}} > 10\%$ |
 | Stability | Maximum amount of TAC change between management periods | $Tcmax$ | Maximum ratio of TAC change |
 
@@ -355,81 +360,6 @@ Each PI was calculated for every Reference OM (i.e., 400 PIs). Examples of each 
 #### Stability
 
 ![Stability performance indicators. The blue lines, arrows, or dots indicate the meaning of the metric. Find more details in @tbl-pm.](../figures/stability_ex.png){#fig-pm-stability}
-
-<!-- ## Results -->
-
-<!-- ### Performance indicators -->
-
-<!-- ```{r} -->
-<!-- #| label: tbl-pm-summ -->
-<!-- #| tbl-cap: Performance indicators results. Numbers indicate the median over the 400 PMs calculated per HCR and OM. The color scale is independent for every column. -->
-<!-- source("../tables/make_tables_pm.R") -->
-<!-- source("../figures/make_figures_pm.R") -->
-<!-- mytab = readRDS('../tables/PM_summary.rds') -->
-<!-- attach_excel <- mytab %>% -->
-<!--   download_this( -->
-<!--     output_name = "PerfMetrics", -->
-<!--     output_extension = ".xlsx",  -->
-<!--     button_label = "Download Excel", -->
-<!--     button_type = "primary"  -->
-<!--   ) -->
-<!-- mytab |> ungroup() |> gt() |>  -->
-<!--   tab_spanner(label = md("**Status**"),  -->
-<!--               columns = c('minB', 'meanB', 'meanF', 'pGreen', 'pRed')) |> -->
-<!--   tab_spanner(label = md("**Safety**"),  -->
-<!--               columns = c('pBlim', 'pBmsy')) |> -->
-<!--   tab_spanner(label = md("**Yield**"),  -->
-<!--               columns = c('Csht', 'Cmed', 'Clon')) |> -->
-<!--   tab_spanner(label = md("**Stability**"),  -->
-<!--               columns = c('Cc', 'Csd', 'pShw', 'pTX', 'maxTc')) |> -->
-<!--   fmt_number(decimals = 2) |> -->
-<!--   fmt_number(columns = c("Clon", "Cmed", "Csht", "Csd"), decimals = 0) |> -->
-<!--   fmt_percent( -->
-<!--      columns = c("pGreen", "pRed", "pBlim", "pBmsy", "Cc", "pShw", "pTX", "maxTc"), -->
-<!--      decimals = 0 -->
-<!--   ) |>  -->
-<!--   cols_label(Ftgt = md("**F<sub>tgt</sub>**"), -->
-<!--              Btgt = md("**B<sub>thr</sub>**")) |> -->
-<!--   data_color(method = "numeric", palette = c("#ffffff", "#000000")) |>  -->
-<!--   tab_source_note(attach_excel)  -->
-<!--   # opt_interactive(use_filters = TRUE, use_pagination = FALSE, use_sorting = FALSE) -->
-<!-- ``` -->
-
-<!-- ```{r} -->
-<!-- #| label: tbl-pm-summ-robust -->
-<!-- #| tbl-cap: Performance indicators results for robustness scenarios. Numbers indicate the median over the 400 PMs calculated per HCR and OM. The color scale is independent for every column. -->
-<!-- mytab = readRDS('../tables/PM_summary_robust.rds') -->
-<!-- attach_excel <- mytab %>% -->
-<!--   download_this( -->
-<!--     output_name = "PerfMetrics_Robust", -->
-<!--     output_extension = ".xlsx",  -->
-<!--     button_label = "Download Excel", -->
-<!--     button_type = "primary"  -->
-<!--   ) -->
-<!-- mytab |> ungroup() |> gt() |>  -->
-<!--   tab_spanner(label = md("**Status**"),  -->
-<!--               columns = c('minB', 'meanB', 'meanF', 'pGreen', 'pRed')) |> -->
-<!--   tab_spanner(label = md("**Safety**"),  -->
-<!--               columns = c('pBlim', 'pBmsy')) |> -->
-<!--   tab_spanner(label = md("**Yield**"),  -->
-<!--               columns = c('Csht', 'Cmed', 'Clon')) |> -->
-<!--   tab_spanner(label = md("**Stability**"),  -->
-<!--               columns = c('Cc', 'Csd', 'pShw', 'pTX', 'maxTc')) |> -->
-<!--   fmt_number(decimals = 2) |> -->
-<!--   fmt_number(columns = c("Clon", "Cmed", "Csht", "Csd"), decimals = 0) |> -->
-<!--   fmt_percent( -->
-<!--      columns = c("pGreen", "pRed", "pBlim", "pBmsy", "Cc", "pShw", "pTX", "maxTc"), -->
-<!--      decimals = 0 -->
-<!--   ) |>  -->
-<!--   cols_label(Scen = md("**Scen**"), -->
-<!--              Ftgt = md("**F<sub>tgt</sub>**"), -->
-<!--              Btgt = md("**B<sub>thr</sub>**")) |> -->
-<!--   data_color(method = "numeric", palette = c("#ffffff", "#000000")) |>  -->
-<!--   tab_source_note(attach_excel)  -->
-<!--   # opt_interactive(use_filters = TRUE, use_pagination = FALSE, use_sorting = FALSE) -->
-<!-- ``` -->
-
-<!-- ![Performance indicators for main scenarios.](../figures/pm_radar.png){#fig-pm-radar} -->
 
 ## Glossary
 
