@@ -148,9 +148,13 @@ Then, 100 models per weighting scenario were selected based on maximum gradient,
 
 The robustness scenarios explored the impacts of changes in $R_0$ and recruitment variability:
 
-- Changes in $R_0$: decrease or increase in the $R_0$ parameter of the Beverton-Holt relationship by 20% in the projection period from the estimated values in the Reference OMs.
+- Increase in mean recruitment level: the $R_0$ parameter of the Beverton-Holt relationship increased by 20% in the projection period with respect to the values used in the Reference OMs
 
-- Changes in sigmaR: increase in the recruitment variability by 20% in the simulation period from the estimated values in the Reference OMs.
+- Decrease in mean recruitment level: the $R_0$ parameter of the Beverton-Holt relationship decreased by 20% in the projection period with respect to the values used in the Reference OMs
+
+- Increase in recruitment variability: the sigmaR parameter increased by 20% in the projection period with respect to the values used in the Reference OMs
+
+All CMPs were also tested for the Robustness OMs.
 
 ### Validation
 
@@ -230,23 +234,23 @@ The management advice is given every three years (*management period*) and the t
 
 ### Pseudo-constant catch {#sec-mp-pcc}
 
-The total allowable catch (TAC) for the next management period ($t+1$) is assumed constant, unless a reference value ($I_{G}$) derived from a group of indices of abundance in the last two years falls below a reference value $I_{ref}=0.91$ (value observed in 2010, when $SSB>SSB_{msy}$):
+The total allowable catch (TAC) for the next management period ($t+1$) is assumed constant, unless $\bar{J}$, derived from a group of indices of abundance in the last three years, falls below a reference value $J_{ref}=1.08$ (see @fig-pcc):
 
 $$TAC_{t+1} =
 \begin{cases}
-TAC_{ct}, & \text{if }I_{G} \geq I_{ref} \\
-TAC_{ct}(\frac{I_{G}}{I_{ref}}), & \text{if }I_{G} < I_{ref}
+TAC_{ct}, & \text{if }\bar{J} \geq J_{ref} \\
+TAC_{ct}(\frac{\bar{J}}{J_{ref}}), & \text{if }\bar{J} < J_{ref}
 \end{cases}$$
 
-where $TAC_{ct}=42,000$ tonnes (@fig-pcc). $I_{G}$ was calculated as follows:
+where $TAC_{ct}=42,000$ tonnes. $J_{ref}$ was set equal to the value observed in 2010, which is the most recent year when $SSB>SSB_{msy}$ after a period of $SSB<SSB_{msy}$. In order to derive $\bar{J}$, we first calculated a *combined* index of abundance ($J_Y$) for every year $Y$, where $Y\in \{y-1,...,y-3\}$:
 
-$$I_G = exp(\frac{1}{n_i}\sum_{i}log(I^*_i))$$
+$$J_Y = \frac{\sum_{i=1}^{n_i}I_{i,Y}w_{i}}{\sum_{i=1}^{n_i}w_{i}}$${#eq-pcc}
 
-where $n_i$ is the number of selected indices of abundance and $I^*_i$ was calculated for every selected index of abundance $I_i$ using information from the last two years ($y-1$ and $y-2$):
+where $n_i$ represents the number of selected indices, $I_{i,Y}$ represents the value of index $i$ in year $Y$, and $w_{i}$ is the weighting factor. $w_{i}$ is derived from the standard deviation ($\sigma$) and temporal autocorrelation ($\rho$) of indices residuals (see @tbl-cpue-rho):
 
-$$I^*_i = \frac{I_{i,y-1}+I_{i,y-2}}{2}$$
+$$w_{i}=\frac{1}{\sqrt{\sigma_i/(1-\rho_i)}}$${#eq-pcc-w}
 
-For this case, the selected indices of abundance $I_i$ were (see @tbl-fleet for fleet description):
+The selected indices of abundance $I_i$ were:
 
 -   $1\_BB$
 -   $6\_JPLL\_S$
@@ -255,27 +259,21 @@ For this case, the selected indices of abundance $I_i$ were (see @tbl-fleet for 
 -   $9\_USLL\_N$
 -   $10\_USLL\_S$
 
+We then calculate $\bar{J}$ as the average of the $J_{Y}$ values:
+
+$$\bar{J} = \frac{J_{y-1}+J_{y-2}+J_{y-3}}{3}$$
+
 In addition, the TAC variation between consecutive management periods $TAC_{t+1}$ and $TAC_{t}$ could not exceed 15%.
 
 ![Derivation of the TAC for the next management period ($TAC_{t+1}$) in the pseudoconstant catch MP.](../figures/pccatch.png){#fig-pcc width="55%"}
 
 ### Index-based {#sec-mp-emp}
 
-The total allowable catch (TAC) for the next management period ($t+1$) is calculated from the TAC in the current management period $t$ and a factor $J_{rat}$ derived from a selected indices (see @sec-mp-pcc). First, we calculated a *combined* index of abundance ($J_Y$) for every year $Y$, where $Y\in \{y-1,...,y-6\}$:
-
-<!-- $$J_Y = \frac{\sum_{i=i}^{n_i}I_{i,Y}}{n_i}$${#eq-emp1} -->
-
-$$J_Y = \frac{\sum_{i=1}^{n_i}I_{i,Y}w_{i}}{\sum_{i=1}^{n_i}w_{i}}$${#eq-emp}
-
-where $n_i$ represents the number of selected indices, $I_{i,Y}$ represents the value of index $i$ in year $Y$, and $w_{i}$ is the weighting factor. $w_{i}$ is derived from the standard deviation ($\sigma$) and temporal autocorrelation ($\rho$) of indices residuals:
-
-$$w_{i}=\frac{1}{\sqrt{\sigma_i/(1-\rho_i)}}$$
+The total allowable catch (TAC) for the next management period ($t+1$) is calculated from the TAC in the current management period $t$ and a factor $J_{rat}$ derived from a selected indices (see @sec-mp-pcc). First, we used @eq-pcc and @eq-pcc-w to calculate a *combined* index of abundance ($J_Y$) for every year $Y$, where $Y\in \{y-1,...,y-6\}$.
 
 Once $J_Y$ is calculated, we then derive the ratio of change in $J$ between two consecutive periods in the previous six years (@fig-Jrat):
 
 $$J_{rat} = \frac{J_{y-1}+J_{y-2}+J_{y-3}}{J_{y-4}+J_{y-5}+J_{y-6}}$$
-
-![Example of the derivation of $J_Y$ from a set of indices. The red line represents $J_Y$ for the previous six years.](../figures/Emp_calculation.png){#fig-Jrat width="55%"}
 
 Finally, the TAC for the next management period is obtained:
 
@@ -287,6 +285,8 @@ We imposed two types of restriction on the TAC variation between consecutive man
 - Maximum increase and decrease of 10%
 
 In addition, $TAC_{t}$ was restricted to not exceeding 50,000 tonnes.
+
+![Example of the derivation of $J_Y$ from a set of indices. The red line represents $J_Y$ for the previous six years.](../figures/Emp_calculation.png){#fig-Jrat width="55%"}
 
 ### Model-based
 
@@ -312,7 +312,7 @@ In addition, $TAC_{t}$ was restricted to not exceeding 50,000 tonnes.
 
 ## Performance Indicators
 
-14 PIs have been developed for the N-ALB MSE (@tbl-pm) and are calculated in the simulation period. These PIs are grouped into four types: 
+14 PIs have been developed for the N-ALB MSE (@tbl-pm) and are calculated for the simulation period. These PIs are grouped into four types: 
 
 - **Status**: indicators related to stock status 
 
@@ -322,7 +322,7 @@ In addition, $TAC_{t}$ was restricted to not exceeding 50,000 tonnes.
 
 - **Stability**: indicators related to the variation in TAC between management cycles
 
-Each PI was calculated for every Reference OM (i.e., 400 PIs). Examples of each PI is given below.
+Each PI was calculated for every Reference and Robustness OMs. Examples of each PI is given below.
 
 | Type | Metric | Symbol | Description |
 |-----------------|-------------------|-----------------|-------------------|

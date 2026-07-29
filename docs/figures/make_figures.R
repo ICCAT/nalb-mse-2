@@ -74,11 +74,11 @@ p1 = ggplot() +
   geom_curve(
     aes(x = 1.25, y = 0.47, xend = 0.42, yend = 0.4),
     curvature = -0.3, arrow = arrow(length = unit(0.2, "cm")), linewidth = 0.5 ) +
-  scale_x_continuous(breaks = c(0, 1), labels = c("0", expression(I[ref]))) +
+  scale_x_continuous(breaks = c(0, 1), labels = c("0", expression(J[ref]))) +
   scale_y_continuous(breaks = c(0, 1), labels = c("0", expression(TAC[ct]))) +
   coord_cartesian(xlim = c(0,1.5), ylim = c(0,1.2), expand = c(0,0)) +
   theme_classic() +
-  ylab(expression(TAC["t+1"])) + xlab(expression(I[G]))
+  ylab(expression(TAC["t+1"])) + xlab(expression(bar(J)))
 ggsave(filename = file.path(fig_dir, 'pccatch.png'), plot = p1, 
        width = 80, height = 70, units = "mm", dpi = 300)
 
@@ -346,7 +346,7 @@ p5 = ggplot(data = datapoly, aes(x = x, y = y)) +
         strip.background = element_blank()) +
   guides(fill = 'none') +
   scale_fill_manual(values = c('#8cff66', '#ffff00', '#ff3300', '#ff9900')) +
-  annotate("text", x = 1, y = 1.9, label = "PGR",  size = 3, color = 'blue')
+  annotate("text", x = 1, y = 1.9, label = "PRK",  size = 3, color = 'blue')
 
 # Merge status plots:
 merged_plot = grid.arrange(p1, p2, p3, p4, p5, ncol = 3)
