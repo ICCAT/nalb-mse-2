@@ -54,11 +54,11 @@ flowchart TB
 timeline
     section Previous Management Periods
         ... : Data available for MP
-    section Current <br> Management Period (t)
+    section Current <br> Management Period
         y-2 : Data available for MP
         y-1 : Data available for MP
         y (present) : Run MP
-    section Next <br> Management Period (t+1)
+    section Next <br> Management Period
         y+1 : Apply TAC from MP
         y+2 : Apply TAC from MP
         y+3 : Apply TAC from MP

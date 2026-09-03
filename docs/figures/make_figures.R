@@ -133,7 +133,7 @@ p1 = ggplot(data = data.frame(x = c(n_vals-2-0.25, n_vals-2-0.25, n_vals+0.25, n
                               y = c(-10, 10, 10, -10, -10))) +
   geom_polygon(aes(x = x, y = y), fill = "gray50", alpha = 0.25) +
   geom_line(data = cpue_df, aes(x = time, y = cpue, color = type)) +
-  annotate("text", x = n_vals-1, y = 0.92, label = "Current\nManagement\nPeriod (t)", size = 2.5) +
+  annotate("text", x = n_vals-1, y = 0.92, label = "Current\nManagement\nPeriod", size = 2.5) +
   scale_color_brewer(palette = "YlGnBu") +
   geom_line(data = Ig_df_1, aes(x = time, y = cpue), color = 'red') +
   geom_point(data = Ig_df_1, aes(x = time, y = cpue), color = 'red', size = 1.7) +

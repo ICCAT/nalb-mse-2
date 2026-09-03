@@ -234,9 +234,9 @@ The management advice is given every three years (*management period*) and the t
 
 ### Pseudo-constant catch {#sec-mp-pcc}
 
-The total allowable catch (TAC) for the next management period ($t+1$) is assumed constant, unless $\bar{J}$, derived from a group of indices of abundance in the last three years, falls below a reference value $J_{ref}=1.08$ (see @fig-pcc):
+The total allowable catch (TAC) for the next management period ($\{y+1,y+2,y+3\}$) is assumed constant, unless $\bar{J}$, derived from a group of indices of abundance in the last three years, falls below a reference value $J_{ref}=1.08$ (see @fig-pcc):
 
-$$TAC_{t+1} =
+$$TAC_{\{y+1,y+2,y+3\}} =
 \begin{cases}
 TAC_{ct}, & \text{if }\bar{J} \geq J_{ref} \\
 TAC_{ct}(\frac{\bar{J}}{J_{ref}}), & \text{if }\bar{J} < J_{ref}
@@ -246,69 +246,67 @@ where $TAC_{ct}=42,000$ tonnes. $J_{ref}$ was set equal to the value observed in
 
 $$J_Y = \frac{\sum_{i=1}^{n_i}I_{i,Y}w_{i}}{\sum_{i=1}^{n_i}w_{i}}$${#eq-pcc}
 
-where $n_i$ represents the number of selected indices, $I_{i,Y}$ represents the value of index $i$ in year $Y$, and $w_{i}$ is the weighting factor. $w_{i}$ is derived from the standard deviation ($\sigma$) and temporal autocorrelation ($\rho$) of indices residuals (see @tbl-cpue-rho):
+where $n_i$ represents the number of selected indices, $I_{i,Y}$ represents the value of index $i$ in year $Y$, and $w_{i}$ is the weighting factor. $w_{i}$ is derived from the standard deviation ($\sigma$) and temporal autocorrelation ($\rho$) of indices residuals:
 
 $$w_{i}=\frac{1}{\sqrt{\sigma_i/(1-\rho_i)}}$${#eq-pcc-w}
 
-The selected indices of abundance $I_i$ were:
+The selected indices of abundance $I_i$ were those used in the 2023 assessment (excluding the historical ones):
 
--   $1\_BB$
--   $6\_JPLL\_S$
--   $7\_TAILL\_N$
--   $8\_TAILL\_S$
--   $9\_USLL\_N$
--   $10\_USLL\_S$
+-   Spanish baitboat ($1\_BB$)
+-   Japanese longline index from southern region ($6\_JPLL\_S$)
+-   Taiwanese longline index from northern region ($7\_TAILL\_N$)
+-   Taiwanese longline index from southern region ($8\_TAILL\_S$)
+-   US longline index from northern region ($9\_USLL\_N$)
+-   US longline index from southern region ($10\_USLL\_S$)
 
 We then calculate $\bar{J}$ as the average of the $J_{Y}$ values:
 
 $$\bar{J} = \frac{J_{y-1}+J_{y-2}+J_{y-3}}{3}$$
 
-In addition, the TAC variation between consecutive management periods $TAC_{t+1}$ and $TAC_{t}$ could not exceed 15%.
+In addition, the TAC variation between consecutive management periods $TAC_{\{y+1,y+2,y+3\}}$ and $TAC_{\{y-2,y-1,y\}}$ could not exceed 15%.
 
 ![Derivation of the TAC for the next management period ($TAC_{t+1}$) in the pseudoconstant catch MP.](../figures/pccatch.png){#fig-pcc width="55%"}
 
 ### Index-based {#sec-mp-emp}
 
-The total allowable catch (TAC) for the next management period ($t+1$) is calculated from the TAC in the current management period $t$ and a factor $J_{rat}$ derived from a selected indices (see @sec-mp-pcc). First, we used @eq-pcc and @eq-pcc-w to calculate a *combined* index of abundance ($J_Y$) for every year $Y$, where $Y\in \{y-1,...,y-6\}$.
+The total allowable catch (TAC) for the next management period ($\{y+1,y+2,y+3\}$) is calculated from the TAC in the current management period $\{y-2,y-1,y\}$ and a factor $J_{rat}$ derived from a selected indices (see @sec-mp-pcc). First, we used @eq-pcc and @eq-pcc-w to calculate a *combined* index of abundance ($J_Y$) for every year $Y$, where $Y\in \{y-1,...,y-6\}$.
 
-Once $J_Y$ is calculated, we then derive the ratio of change in $J$ between two consecutive periods in the previous six years (@fig-Jrat):
+Once $J_Y$ is calculated, we then derive the ratio of change in $J$ between the last three years ($y-1$, $y-2$, and $y-3$) and the preceding three years ($y-4$, $y-5$, and $y-6$, @fig-Jrat):
 
 $$J_{rat} = \frac{J_{y-1}+J_{y-2}+J_{y-3}}{J_{y-4}+J_{y-5}+J_{y-6}}$$
 
 Finally, the TAC for the next management period is obtained:
 
-$$TAC_{t+1} = J_{rat} TAC_t $$
+$$TAC_{\{y+1,y+2,y+3\}} = J_{rat} TAC_{\{y-2,y-1,y\}} $$
 
-We imposed two types of restriction on the TAC variation between consecutive management periods $TAC_{t+1}$ and $TAC_{t}$:
+We imposed two types of restriction on the TAC variation between consecutive management periods $TAC_{\{y+1,y+2,y+3\}}$ and $TAC_{\{y-2,y-1,y\}}$:
 
 - Maximum increase of 25% and decrease of 20%, or
 - Maximum increase and decrease of 10%
 
-In addition, $TAC_{t}$ was restricted to not exceeding 50,000 tonnes.
+In addition, $TAC_{\{y+1,y+2,y+3\}}$ was restricted to a maximum TAC of 50,000 tonnes.
 
 ![Example of the derivation of $J_Y$ from a set of indices. The red line represents $J_Y$ for the previous six years.](../figures/Emp_calculation.png){#fig-Jrat width="55%"}
 
 ### Model-based
 
-Simulated data was included in a stochastic surplus production model in continuous time (SPiCT). SPiCT is a full state-space model, where biomass and fishing dynamics are modelled as states, which are observed indirectly through biomass indices and commercial catches sampled with error [@pedersenStochasticSurplusProduction2017]. SPiCT is able to calculate maximum sustainable yield (MSY) reference points. 
-
-The data included in SPiCT was composed of aggregated catch and the indices of abundance included in the stock assessment model (@fig-cpue). SPiCT assumed that the stock started at unfished levels. A prior on the intrinsic growth rate was specified and obtained from [FishBase](https://www.fishbase.org/). Likewise, a prior on carrying capacity was set using information from the virgin biomass estimates from SS3.
+Based upon the stochastic surplus production model in continuous time (SPiCT, @pedersenStochasticSurplusProduction2017). SPiCT is a full state-space model, where biomass and fishing dynamics are modelled as states, which are observed indirectly through biomass indices and commercial catches sampled with error. SPiCT calculates maximum sustainable yield (MSY) reference points and allows to run short-term projections.
 
 ![Example of HCR in model-based MPs.](../figures/hcr_example.png){#fig-hcr width="50%"}
 
-TAC is derived from a harvest control rule based on stock status estimate (@fig-hcr). In the HCR, $F_{tgt}$ and $B_{thr}$ need to be defined, and the following options were tested (@fig-combs):
+The data generated from the OMs and the OEM is included in SPiCT to estimate the stock status in the final year of each management period and then apply a HCR (@fig-hcr) to derive the TAC for the next management period. In the HCR, $F_{tgt}$ and $B_{thr}$ need to be defined, and the following options were tested (@fig-combs):
 
-- $F_{tgt}=0.8F_{msy}$ and $B_{thr}=B_{msy}$
-- $F_{tgt}=F_{msy}$ and $B_{thr}=B_{msy}$
+-   $F_{tgt}=0.8F_{msy}$ and $B_{thr}=B_{msy}$
+-   $F_{tgt}=F_{msy}$ and $B_{thr}=B_{msy}$
 
-![Evaluated HCRs in model-based MPs.](../figures/hcr_combs_2.png){#fig-combs width="55%"}
+![Harvest control rules (HCR) evaluated in this MSE.](../figures/hcr_combs_2.png){#fig-combs width="50%"}
 
-It was assumed that $B_{lim}=0.4\times B_{msy}$ and $F_{mim}=0.1\times F_{msy}$ for all cases. These MPs were divided into two groups, depending on the maximum allowed variation between $TAC_{t+1}$ and $TAC_{t}$: 
+It was assumed that $B_{lim}=0.4\times B_{msy}$ and $F_{min}=0.1\times F_{msy}$ for all cases as in Recommendation 21-04. These model-based CMPs were divided into two groups, depending on the maximum allowed variation between $TAC_{\{y+1,y+2,y+3\}}$ and $TAC_{\{y-2,y-1,y\}}$: 
 
 - Maximum increase or decrease of 10%, or
 - Maximum increase of 25% and decrease of 20%
 
-In addition, $TAC_{t}$ was restricted to not exceeding 50,000 tonnes.
+In addition, $TAC_{\{y+1,y+2,y+3\}}$ was restricted to a maximum TAC of 50,000 tonnes.
 
 ## Performance Indicators
 
@@ -329,16 +327,16 @@ Each PI was calculated for every Reference and Robustness OMs. Examples of each 
 | Status | Minimum spawner biomass relative to $B_{msy}$ | $minB$ | $min(B_y/B_{msy})$ |
 | Status | Geometric mean spawner biomass relative to $B_{msy}$ | $meanB$ | $(\prod_y B_y/B_{msy})^{1/n_y}$ |
 | Status | Geometric mean fishing mortality relative to $F_{msy}$ | $meanF$ | $(\prod_y F_y/F_{msy})^{1/n_y}$ |
-| Status | Probability of being in the Kobe green quadrant | $PGK$ | Proportion of years in green quadrant (see @fig-hcr) |
-| Status | Probability of being in the Kobe red quadrant | $PRK$ | Proportion of years in red quadrant (see @fig-hcr) |
+| Status | Probability of being in the Kobe green quadrant | $PGK$ | Proportion of years in green quadrant |
+| Status | Probability of being in the Kobe red quadrant | $PRK$ | Proportion of years in red quadrant |
 | Safety | Probability of $B>B_{lim}$ | $PBlim$ | Proportion of years that $B>B_{lim}$ |
 | Safety | Probability of $B_{lim}<B<B_{msy}$ | $PBmsy$ | Proportion of years that $B_{lim}<B<B_{msy}$ |
 | Yield | Mean TAC (short term) | $Tstr$ | Mean TAC from 1 to 3 years |
 | Yield | Mean TAC (medium term) | $Tmed$ | Mean TAC from 5 to 10 years |
 | Yield | Mean TAC (long term) | $Tlon$ | Mean TAC from 15 to 25 years |
 | Stability | Standard deviation in TAC | $Tsd$ | TAC standard deviation |
-| Stability | Mean absolute proportional change (%) in TAC | $Tc$ | Mean of $\mid\frac{TAC_t - TAC_{t-1}}{TAC_{t-1}}\mid \times 100\%$ |
-| Stability | Probability of TAC change above 10% | $PTcx$ | Proportion of management cycles when the ratio of change $\frac{TAC_{t+1} - TAC_{t}}{TAC_{t}} > 10\%$ |
+| Stability | Mean absolute proportional change (%) in TAC | $Tc$ | Mean of $\mid\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}}\mid \times 100\%$ |
+| Stability | Probability of TAC change above 10% | $PTcx$ | Proportion of management cycles when the ratio of change $\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}} > 10\%$ |
 | Stability | Maximum amount of TAC change between management periods | $Tcmax$ | Maximum ratio of TAC change |
 
 : Performance indicators and description. These indicators were calculated from the simulation period. {#tbl-pm}
