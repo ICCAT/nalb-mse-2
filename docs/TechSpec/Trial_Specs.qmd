@@ -310,17 +310,17 @@ In addition, $TAC_{\{y+1,y+2,y+3\}}$ was restricted to a maximum TAC of 50,000 t
 
 ## Performance Indicators
 
-14 PIs have been developed for the N-ALB MSE (@tbl-pm) and are calculated for the simulation period. These PIs are grouped into four types: 
+14 PIs have been developed for the N-ALB MSE (@tbl-pm). These PIs are grouped into four types: 
 
 - **Status**: indicators related to stock status 
 
 - **Safety**: indicators related to the probability of the stock not falling below the biological reference points
 
-- **Yield**: indicators related to the TAC in the simulation years
+- **Yield**: indicators related to the catch or TAC in the simulation years
 
 - **Stability**: indicators related to the variation in TAC between management cycles
 
-Each PI was calculated for every Reference and Robustness OMs. Examples of each PI is given below.
+Each PI was calculated for every iteration in the Reference and Robustness OMs. Examples of each PI are given below.
 
 | Type | Metric | Symbol | Description |
 |-----------------|-------------------|-----------------|-------------------|
@@ -329,17 +329,17 @@ Each PI was calculated for every Reference and Robustness OMs. Examples of each 
 | Status | Geometric mean fishing mortality relative to $F_{msy}$ | $meanF$ | $(\prod_y F_y/F_{msy})^{1/n_y}$ |
 | Status | Probability of being in the Kobe green quadrant | $PGK$ | Proportion of years in green quadrant |
 | Status | Probability of being in the Kobe red quadrant | $PRK$ | Proportion of years in red quadrant |
-| Safety | Probability of $B>B_{lim}$ | $PBlim$ | Proportion of years that $B>B_{lim}$ |
-| Safety | Probability of $B_{lim}<B<B_{msy}$ | $PBmsy$ | Proportion of years that $B_{lim}<B<B_{msy}$ |
-| Yield | Mean TAC (short term) | $Tstr$ | Mean TAC from 1 to 3 years |
-| Yield | Mean TAC (medium term) | $Tmed$ | Mean TAC from 5 to 10 years |
-| Yield | Mean TAC (long term) | $Tlon$ | Mean TAC from 15 to 25 years |
+| Safety | Probability of $B_y>B_{lim}$ | $PBlim$ | Proportion of years that $B_y>B_{lim}$ |
+| Safety | Probability of $B_{lim}<B_y<B_{msy}$ | $PBmsy$ | Proportion of years that $B_{lim}<B_y<B_{msy}$ |
+| Yield | Mean TAC (short term) | $Tstr$ | Mean TAC from years 1 to 3 |
+| Yield | Mean TAC (medium term) | $Tmed$ | Mean TAC from years 5 to 10 |
+| Yield | Mean TAC (long term) | $Tlon$ | Mean TAC from years 15 to 25 |
 | Stability | Standard deviation in TAC | $Tsd$ | TAC standard deviation |
-| Stability | Mean absolute proportional change (%) in TAC | $Tc$ | Mean of $\mid\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}}\mid \times 100\%$ |
-| Stability | Probability of TAC change above 10% | $PTcx$ | Proportion of management cycles when the ratio of change $\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}} > 10\%$ |
-| Stability | Maximum amount of TAC change between management periods | $Tcmax$ | Maximum ratio of TAC change |
+| Stability | Mean of absolute proportional change (%) between TACs of consecutive management cycles | $Tc$ | Mean of $\mid\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}}\mid \times 100\%$ |
+| Stability | Probability of TAC change above 10% | $PTcx$ | Proportion of management cycles when $\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}} > 10\%$ |
+| Stability | Maximum TAC change ratio between consecutive management periods | $Tcmax$ | $max(\mid\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}}\mid \times 100\%)$ |
 
-: Performance indicators and description. These indicators were calculated from the simulation period. {#tbl-pm}
+: Performance indicators and description. These indicators were calculated for every OM iteration and only considering the simulation period. {#tbl-pm}
 
 ### Examples
 

@@ -392,30 +392,30 @@ p8 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
   geom_line() + geom_point() +
   geom_segment(x = 1, xend = 3, y = mean(exvec$catch[1:3]), yend = mean(exvec$catch[1:3]), 
                color = 'blue') +
-  theme_bw() + ylab("Catch (t)") + xlab(x_lab) +
+  theme_bw() + ylab("TAC (t)") + xlab(x_lab) +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(),
         axis.text.x=element_blank(), axis.ticks.x=element_blank()) +
-  annotate("text", x = 15, y = 4, label = "Cstr", 
+  annotate("text", x = 15, y = 4, label = "Tstr", 
            size = 3, color = 'blue', parse = TRUE)
 
 p9 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
   geom_line() + geom_point() +
   geom_segment(x = 5, xend = 10, y = mean(exvec$catch[5:10]), yend = mean(exvec$catch[5:10]), 
                color = 'blue') +
-  theme_bw() + ylab("Catch (t)") + xlab(x_lab) +
+  theme_bw() + ylab("TAC (t)") + xlab(x_lab) +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(),
         axis.text.x=element_blank(), axis.ticks.x=element_blank()) +
-  annotate("text", x = 15, y = 4, label = "Cmed", 
+  annotate("text", x = 15, y = 4, label = "Tmed", 
            size = 3, color = 'blue', parse = TRUE)
 
 p10 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
   geom_line() + geom_point() +
   geom_segment(x = 15, xend = 25, y = mean(exvec$catch[15:25]), yend = mean(exvec$catch[15:25]), 
                color = 'blue') +
-  theme_bw() + ylab("Catch (t)") + xlab(x_lab) +
+  theme_bw() + ylab("TAC (t)") + xlab(x_lab) +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(),
         axis.text.x=element_blank(), axis.ticks.x=element_blank()) +
-  annotate("text", x = 15, y = 4, label = "Clon", 
+  annotate("text", x = 15, y = 4, label = "Tlon", 
            size = 3, color = 'blue', parse = TRUE)
 
 # Merge yield plots:
@@ -502,7 +502,35 @@ p15 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
   annotate("text", x = 15, y = 4, label = "Tcmax", 
            size = 3, color = 'blue', parse = T)
 
+# Tac change:
+p16 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
+  geom_point() + 
+  geom_segment(data = plot_df4, 
+               aes(x = Yr_sim, xend = Yr_sim_end, 
+                   y = catch, yend = catch_end), 
+               color = 'blue',
+               arrow = arrow(length = unit(0.15, "cm"))) +
+  theme_bw() + ylab("TAC (t)") + xlab(x_lab) +
+  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
+        axis.text.x=element_blank(), axis.ticks.x=element_blank(),
+        legend.position = "none") +
+  annotate("text", x = 15, y = 4, label = "Tc", 
+           size = 3, color = 'blue')
+
+# Tsd:
+p17 = ggplot(data = plot_df, aes(x = Yr_sim, y = catch)) +
+  geom_point() + geom_line() +
+  geom_segment(data = plot_df %>% filter(Yr_sim %in% seq(from = 2, by = 3, length.out = 10)), 
+               aes(x = Yr_sim, xend = Yr_sim, y = mean(catch), yend = catch), 
+               color = 'blue') +
+  theme_bw() + ylab("TAC (t)") + xlab(x_lab) +
+  geom_hline(yintercept = mean(plot_df$catch), color = 'black') +
+  theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(),
+        axis.text.x=element_blank(), axis.ticks.x=element_blank()) +
+  annotate("text", x = 15, y = 4, label = "Tsd", 
+           size = 3, color = 'blue', parse = TRUE)
+
 # Merge stability plots:
-merged_plot = grid.arrange(p11, p12, p13, p14, p15, ncol = 3)
+merged_plot = grid.arrange(p16, p17, p14, p15, ncol = 2)
 ggsave(filename = file.path(fig_dir, 'stability_ex.png'), plot = merged_plot, 
        width = 170, height = 120, units = "mm", dpi = 300)
