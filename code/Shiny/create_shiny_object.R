@@ -338,12 +338,9 @@ myoutput$fleet$metadata <- data.frame(Code=c("BB", "BBisl", "TRGN", "MWT", "JPLL
 
 # Variable information:
 myoutput$fleet$variables <- data.frame(
-  Code=c('Catch'),
-  Description=c('Catch in metric tonnes')
+  Code=c('Long-Term Catch'),
+  Description=c('Average Catch in Projection Years 15-30')
 )
-
-# Projection period:
-myoutput$fleet$time <- sim_yr_str:max(all_sim_yr)
 
 # select column names of chosen variables:
 sel_var = c('catch')
