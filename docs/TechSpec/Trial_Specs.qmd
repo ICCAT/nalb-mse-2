@@ -333,7 +333,7 @@ Each PI was calculated for every iteration in the Reference and Robustness OMs. 
 | Safety | Probability of $B_{lim}<B_y<B_{msy}$ | $PBmsy$ | Proportion of years that $B_{lim}<B_y<B_{msy}$ |
 | Yield | Mean TAC (short term) | $Tstr$ | Mean TAC from years 1 to 3 |
 | Yield | Mean TAC (medium term) | $Tmed$ | Mean TAC from years 5 to 10 |
-| Yield | Mean TAC (long term) | $Tlon$ | Mean TAC from years 15 to 25 |
+| Yield | Mean TAC (long term) | $Tlon$ | Mean TAC from years 15 to 30 |
 | Stability | Standard deviation in TAC | $Tsd$ | TAC standard deviation |
 | Stability | Mean of absolute proportional change (%) between TACs of consecutive management cycles | $Tc$ | Mean of $\mid\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}}\mid \times 100\%$ |
 | Stability | Probability of TAC change above 10% | $PTcx$ | Proportion of management cycles when $\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}} > 10\%$ |

@@ -410,7 +410,7 @@ p9 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
 
 p10 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
   geom_line() + geom_point() +
-  geom_segment(x = 15, xend = 25, y = mean(exvec$catch[15:25]), yend = mean(exvec$catch[15:25]), 
+  geom_segment(x = 15, xend = 30, y = mean(exvec$catch[15:25]), yend = mean(exvec$catch[15:25]), 
                color = 'blue') +
   theme_bw() + ylab("TAC (t)") + xlab(x_lab) +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(),
