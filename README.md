@@ -65,3 +65,5 @@ Active scripts include a standard header describing:
 - Inputs
 - Outputs
 
+## TSD
+Trial Specification Document[https://iccat.github.io/nalb-mse-2/TechSpec/Trial_Specs.html]
