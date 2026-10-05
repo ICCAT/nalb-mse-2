@@ -1,0 +1,66 @@
+# ============================================================
+# RUNNING THIS SCRIPT LOCALLY (outside the cluster)
+#
+# This script is designed to run as a SLURM array job on the
+# Hyperion cluster. The following changes are required to
+# run it on a local PC:
+#
+# 1. LIBRARY PATH
+#    Remove or comment out the cluster-specific library path:
+#
+#      # .libPaths(c("/scratch/aurtizberea/rlibs_new", .libPaths()))
+#
+#    Packages must be installed in the default R library.
+#    Install any missing package with install.packages().
+#
+# 2. RUN NUMBER
+#    Replace the SLURM environment variable with a manual
+#    value between 1 and 400:
+#
+#      # sc.i <- as.numeric(Sys.getenv("SLURM_ARRAY_TASK_ID"))
+#      sc.i <- 1   # set manually for local testing
+#
+# 3. SOURCE FILES
+#    Source files are located in the MSE/Others/ folder.
+#    Update the source() calls accordingly:
+#
+#      source("MSE/Others/<script_name>.R")
+#
+# 4. INPUT DATA PATH (in.data)
+#    On the cluster, in.data points to a shared scratch
+#    directory. Locally, it should point to:
+#
+#      in.data <- "MSE/FLoutput/Rinit"
+#
+# 5. OUTPUT PATH
+#    Output files are written to:
+#
+#      FLoutput/2Steps/ModelBased_25var/
+#
+#    Make sure this folder exists before running, or add:
+#
+#      dir.create("FLoutput/2Steps/ModelBased_25var",
+#                 recursive = TRUE, showWarnings = FALSE)
+#
+# 6. WORKING DIRECTORY
+#    Make sure the working directory is set to the root of
+#    the MSE project. Add at the top of the script:
+#
+#      setwd("path/to/MSE")   # adjust to your local path
+#    or use:
+#      setwd(here::here())    # if using the here package
+#
+# 7. PARALLELISM
+#    On the cluster, each run is an independent job.
+#    Locally, if you want to run multiple iterations, wrap
+#    the script in a for loop:
+#
+#      for (sc.i in 1:400) {
+#        source("MSE/Others/<this_script>.R")
+#      }
+#
+#    Note that running all 400 iterations sequentially on a
+#    local PC may take a very long time. Consider running
+#    a small subset (e.g. 1:10) for testing purposes.
+#
+# ============================================================
