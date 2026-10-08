@@ -116,12 +116,10 @@ translate_info = function(my_object) {
   tmp_list$es = tmp_list$en
   tmp_list$es$Description = c("Biomasa desovante relativo a la biomasa desovante al MSY.", 
                                                    "Mortalidad por pesca relativo a la mortalidad por pesca al MSY.",
-                                                   "Reclutamiento edad-0 ('000 peces).",
                                                    "Captura total permisible (toneladas).")
   tmp_list$fr = tmp_list$en
   tmp_list$fr$Description = c("Biomasse reproductrice par rapport à la biomasse reproductrice au MSY.", 
                                                    "Mortalité par pêche par rapport à la mortalité par pêche au MSY.",
-                                                   "Recrutement à l'âge 0 ('000 poissons).",
                                                    "Capture totale autorisée (en tonnes).")
   # Replace main object:
   my_object$timeseries$metadata = tmp_list
