@@ -335,7 +335,7 @@ Each PI was calculated for every iteration in the Reference and Robustness OMs. 
 | Yield | Mean TAC (medium term) | $Tmed$ | Mean TAC from years 5 to 10 |
 | Yield | Mean TAC (long term) | $Tlon$ | Mean TAC from years 15 to 30 |
 | Stability | Standard deviation in TAC | $Tsd$ | TAC standard deviation |
-| Stability | Mean of absolute proportional change (%) between TACs of consecutive management cycles | $Tc$ | Mean of $\mid\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}}\mid \times 100\%$ |
+| Stability | Mean of absolute proportional change (%) between TACs of consecutive management cycles | $MAP$ | Mean of $\mid\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}}\mid \times 100\%$ |
 | Stability | Probability of TAC change above 10% | $PTcx$ | Proportion of management cycles when $\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}} > 10\%$ |
 | Stability | Maximum TAC change ratio between consecutive management periods | $Tcmax$ | $max(\mid\frac{TAC_{\{y+1,y+2,y+3\}} - TAC_{\{y-2,y-1,y\}}}{TAC_{\{y-2,y-1,y\}}}\mid \times 100\%)$ |
 

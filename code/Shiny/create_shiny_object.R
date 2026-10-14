@@ -71,10 +71,10 @@ ref_points = read.csv(file.path(shrpoint_path, 'RefPts/RefPts_FLBRP.csv')) %>%
 
 # -------------------------------------------------------------------------
 # Define MP information matrix and OM factor vector:
-MP_info = data.frame(Code = c('25%_F0.8_B1', '10%_F0.8_B1', 
-                                '25%_F1_B1', '10%_F1_B1',
-                                '15%_PCCatch',
-                                '10%_Emp_W', '25%_Emp_W'
+MP_info = data.frame(Code = c('F0.8_25%', 'F0.8_10%', 
+                              'F1.0_25%', 'F1.0_10%',
+                              'PCC_15%',
+                              'CIR_10%', 'CIR_25%'
                         ),
                         Type = c(rep('Model-Based', times = 4),
                                  rep('Empirical', times = 3)),
@@ -285,7 +285,7 @@ myoutput$pi = list()
 myoutput$pi$metadata <- data.frame(Code=c('minB', 'meanB', 'meanF',
                                           'PGK', 'PRK', 'PBlim', 'PBmsy', 
                                           'Tstr', 'Tmed', 'Tlon',  
-                                          'Tsd', 'Tc', 'PTcx', 'Tcmax'),
+                                          'Tsd', 'MAP', 'PTcx', 'Tcmax'),
                                    Type = c(rep('Status', times = 5),
                                             rep('Safety', times = 2),
                                             rep('Yield', times = 3),

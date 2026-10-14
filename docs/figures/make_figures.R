@@ -514,7 +514,7 @@ p16 = ggplot(data = exvec, aes(x = Yr_sim, y = catch)) +
   theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), 
         axis.text.x=element_blank(), axis.ticks.x=element_blank(),
         legend.position = "none") +
-  annotate("text", x = 15, y = 4, label = "Tc", 
+  annotate("text", x = 15, y = 4, label = "MAP", 
            size = 3, color = 'blue')
 
 # Tsd:
