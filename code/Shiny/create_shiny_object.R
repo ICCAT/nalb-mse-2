@@ -239,16 +239,15 @@ om_iter = om_iter_p %>% mutate(scenario = factor(scenario,
 # Add time series information:
 myoutput$timeseries = list()
 myoutput$timeseries$metadata <- data.frame(
-  Code=c('SB/SB_MSY', 'F/F_MSY', 'Recruitment', 'Catch'),
-  Label=c('SB/SB_MSY', 'F/F_MSY', 'Recruitment', 'Catch'),
+  Code=c('SB/SB_MSY', 'F/F_MSY', 'Catch'),
+  Label=c('SB/SB_MSY', 'F/F_MSY', 'Catch'),
   Description=c('Spawning biomass relative to spawning biomass at MSY',
                 'Fishing mortality relative to fishing mortality at MSY',
-                "Age-0 recruitment ('000s fish)",
                 'Catch (tonnes)')
 )
 
 # select column names of chosen variables:
-sel_var = c('bbmsy', 'ffmsy', 'rec', 'catch')
+sel_var = c('bbmsy', 'ffmsy', 'catch')
 
 # Add some info:
 myoutput$timeseries$time <- all_sim_yr
@@ -338,12 +337,9 @@ myoutput$fleet$metadata <- data.frame(Code=c("BB", "BBisl", "TRGN", "MWT", "JPLL
 
 # Variable information:
 myoutput$fleet$variables <- data.frame(
-  Code=c('Catch'),
-  Description=c('Catch in metric tonnes')
+  Code=c('Long-Term Catch'),
+  Description=c('Average Catch in Projection Years 15-30')
 )
-
-# Projection period:
-myoutput$fleet$time <- sim_yr_str:max(all_sim_yr)
 
 # select column names of chosen variables:
 sel_var = c('catch')
